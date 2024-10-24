@@ -1,7 +1,7 @@
 package application;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDate;
 
 public class Account {
@@ -39,4 +39,3 @@ public class Account {
         return openingDate;
     }
 }
-

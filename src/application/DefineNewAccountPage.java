@@ -10,9 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class DefineNewAccountPage {
@@ -21,9 +25,45 @@ public class DefineNewAccountPage {
     private TextField openingBalanceField;
     private DatePicker openingDateField;
     private ObservableList<Account> accountsList;
+    private String filePath = "accounts.csv";  // Use CSV file
 
     public DefineNewAccountPage() {
         accountsList = FXCollections.observableArrayList();
+        loadAccountsFromFile();  // Load accounts from file when the program starts
+    }
+
+    // Save account to a CSV file
+    private void saveAccountToFile(Account account) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(account.getAccountName() + "," + account.getOpeningBalance() + "," + account.getOpeningDate());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load accounts from the CSV file
+    private void loadAccountsFromFile() {
+        try {
+            // Check if the file exists; if not, create it
+            if (!Files.exists(Paths.get(filePath))) {
+                Files.createFile(Paths.get(filePath));  // Automatically create CSV file if not present
+            }
+
+            // Load accounts from the CSV file
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    String accountName = parts[0];
+                    String openingBalance = parts[1];
+                    LocalDate openingDate = LocalDate.parse(parts[2]);
+                    accountsList.add(new Account(accountName, openingBalance, openingDate));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void display(Stage stage) {
@@ -77,18 +117,16 @@ public class DefineNewAccountPage {
             String openingBalance = openingBalanceField.getText();
             LocalDate openingDate = openingDateField.getValue();
 
-            // Validate input fields
             if (accountName.isEmpty() || openingBalance.isEmpty() || openingDate == null) {
                 System.out.println("Please fill out all fields.");
                 return;
             }
 
-            // Create new Account and add it to the list
             Account newAccount = new Account(accountName, openingBalance, openingDate);
             accountsList.add(newAccount);
 
-            // Sort the accounts by opening date in descending order
-            accountsList.sort(Comparator.comparing(Account::getOpeningDate).reversed());
+            // Save the new account to the CSV file
+            saveAccountToFile(newAccount);
 
             System.out.println("Account saved: " + newAccount.getAccountName());
         });
