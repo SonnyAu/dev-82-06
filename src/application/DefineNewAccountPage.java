@@ -1,95 +1,132 @@
 package application;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class DefineNewAccountPage {
 
-    public static void display() {
-        Stage accountStage = new Stage();
-        accountStage.setTitle("Create New Account");
+    private TextField accountNameField;
+    private TextField openingBalanceField;
+    private DatePicker openingDateField;
+    private ObservableList<Account> accountsList;
 
-        // Layout for account creation form
-        VBox accountLayout = new VBox();
-        accountLayout.setSpacing(10);
-        accountLayout.setPadding(new Insets(20)); // Add padding around the layout
-        accountLayout.setAlignment(Pos.TOP_CENTER); // Align elements to the top-center
+    public DefineNewAccountPage() {
+        accountsList = FXCollections.observableArrayList();
+    }
 
-        // Account Name Section
+    public void display(Stage stage) {
+        // Create form elements
         Label accountNameLabel = new Label("Account Name:");
-        TextField accountNameInput = new TextField();
-        VBox accountNameBox = new VBox(5, accountNameLabel, accountNameInput); // Vertical gap of 5
-        accountNameBox.setAlignment(Pos.TOP_LEFT);
+        accountNameField = new TextField();
 
-        // Opening Date Section
+        Label openingBalanceLabel = new Label("Opening Balance:");
+        openingBalanceField = new TextField();
+
         Label openingDateLabel = new Label("Opening Date:");
-        DatePicker openingDatePicker = new DatePicker();
-        VBox openingDateBox = new VBox(5, openingDateLabel, openingDatePicker);
-        openingDateBox.setAlignment(Pos.TOP_LEFT);
+        openingDateField = new DatePicker(LocalDate.now());
 
-        // Opening Balance Section
-        Label balanceLabel = new Label("Opening Balance:");
-        TextField balanceInput = new TextField();
-        VBox balanceBox = new VBox(5, balanceLabel, balanceInput);
-        balanceBox.setAlignment(Pos.TOP_LEFT);
+        // Layout for form
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10));
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
 
-        // Error message for validation
-        Text errorMessage = new Text();
-        errorMessage.setFill(Color.RED);
+        gridPane.add(accountNameLabel, 0, 0);
+        gridPane.add(accountNameField, 1, 0);
+        gridPane.add(openingBalanceLabel, 0, 1);
+        gridPane.add(openingBalanceField, 1, 1);
+        gridPane.add(openingDateLabel, 0, 2);
+        gridPane.add(openingDateField, 1, 2);
 
-        // Submit button with error handling
-        Button submitButton = new Button("Create");
-        submitButton.setOnAction(e -> {
-            if (accountNameInput.getText().isEmpty() || openingDatePicker.getValue() == null || balanceInput.getText().isEmpty()) {
-                errorMessage.setText("Please enter all required fields.");
-            } else {
-                errorMessage.setText("");
-                accountStage.close(); // Close window when fields are filled
+        // Buttons for Save, Back, View Accounts, and Clear
+        Button saveButton = new Button("Save");
+        Button backButton = new Button("Back");
+        Button viewAccountsButton = new Button("View Accounts");
+        Button clearButton = new Button("Clear");
+
+        HBox buttonBox = new HBox(10, saveButton, viewAccountsButton, clearButton, backButton);
+        buttonBox.setPadding(new Insets(10));
+
+        VBox layout = new VBox(10, gridPane, buttonBox);
+        layout.setPadding(new Insets(10));
+
+        // Set the scene and show the stage
+        Scene scene = new Scene(layout, 400, 300);
+        stage.setTitle("Create New Account");
+        stage.setScene(scene);
+        stage.show();
+
+        // Handle Back button click
+        backButton.setOnAction(event -> Main.displayHome(stage));
+
+        // Handle Save button click
+        saveButton.setOnAction(event -> {
+            String accountName = accountNameField.getText();
+            String openingBalance = openingBalanceField.getText();
+            LocalDate openingDate = openingDateField.getValue();
+
+            // Validate input fields
+            if (accountName.isEmpty() || openingBalance.isEmpty() || openingDate == null) {
+                System.out.println("Please fill out all fields.");
+                return;
             }
+
+            // Create new Account and add it to the list
+            Account newAccount = new Account(accountName, openingBalance, openingDate);
+            accountsList.add(newAccount);
+
+            // Sort the accounts by opening date in descending order
+            accountsList.sort(Comparator.comparing(Account::getOpeningDate).reversed());
+
+            System.out.println("Account saved: " + newAccount.getAccountName());
         });
 
-        // Center the button at the bottom
-        HBox buttonBox = new HBox(submitButton);
-        buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.setPadding(new Insets(10, 0, 0, 0)); // Add padding to the top of the button
+        // Handle View Accounts button click
+        viewAccountsButton.setOnAction(event -> displayAccountsTable(stage));
 
-        // Add elements to the account layout
-        accountLayout.getChildren().addAll(
-                accountNameBox,
-                openingDateBox,
-                balanceBox,
-                errorMessage,
-                buttonBox
-        );
+        // Handle Clear button click to allow another entry
+        clearButton.setOnAction(event -> {
+            accountNameField.clear();
+            openingBalanceField.clear();
+            openingDateField.setValue(LocalDate.now());
+        });
+    }
 
-        // Make text fields and DatePicker resize dynamically with the window
-        accountNameInput.prefWidthProperty().bind(accountLayout.widthProperty().multiply(0.9));
-        balanceInput.prefWidthProperty().bind(accountLayout.widthProperty().multiply(0.9));
+    private void displayAccountsTable(Stage stage) {
+        TableView<Account> accountTable = new TableView<>();
 
-        // Forcing the DatePicker to resize consistently
-        openingDatePicker.setMinWidth(0); // Allow shrinking
-        openingDatePicker.setMaxWidth(Double.MAX_VALUE); // Allow growing
-        openingDatePicker.prefWidthProperty().bind(accountLayout.widthProperty().multiply(0.9));
+        TableColumn<Account, String> nameColumn = new TableColumn<>("Account Name");
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().accountNameProperty());
 
-        // Wrap the VBox in a StackPane to center it within the window
-        StackPane rootPane = new StackPane(accountLayout);
-        rootPane.setAlignment(Pos.CENTER); // Center the VBox in the StackPane
+        TableColumn<Account, String> balanceColumn = new TableColumn<>("Opening Balance");
+        balanceColumn.setCellValueFactory(cellData -> cellData.getValue().openingBalanceProperty());
 
-        // Set up the scene
-        Scene accountScene = new Scene(rootPane, 600, 400);
-        accountStage.setScene(accountScene);
-        accountStage.show();
+        TableColumn<Account, LocalDate> dateColumn = new TableColumn<>("Opening Date");
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().openingDateProperty());
+
+        accountTable.setItems(accountsList);
+        accountTable.getColumns().addAll(nameColumn, balanceColumn, dateColumn);
+
+        VBox tableLayout = new VBox(accountTable);
+        Scene tableScene = new Scene(tableLayout, 400, 300);
+        stage.setScene(tableScene);
+        stage.setTitle("Stored Accounts");
+        stage.show();
+    }
+
+    public List<Account> getAccountsList() {
+        return new ArrayList<>(accountsList);
     }
 }
