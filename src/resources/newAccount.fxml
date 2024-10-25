@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.NewAccountController">
+   <children>
+      <Button fx:id="setRightPaneAsHome" layoutX="25.0" layoutY="25.0" onAction="#setRightPaneAsHome" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Home" textFill="WHITE">
+         <font>
+            <Font name="Microsoft Sans Serif" size="15.0" />
+         </font>
+      </Button>
+      <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="373.0" spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+         </padding>
+         <TextField fx:id="nameField" alignment="CENTER" maxWidth="300" promptText="Account Name" />
+         <TextField fx:id="balanceField" alignment="CENTER" maxWidth="300" promptText="Opening Balance" />
+         <DatePicker fx:id="datePicker" maxWidth="300" />
+         <Button fx:id="submitNewAccount" onAction="#submitNewAccount" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Submit" textFill="WHITE">
+            <font>
+               <Font name="Microsoft Sans Serif" size="15.0" />
+            </font>
+         </Button>
+      </VBox>
+   </children>
+</AnchorPane>

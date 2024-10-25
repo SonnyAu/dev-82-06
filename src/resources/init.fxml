@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.InitController">
+   <children>
+      <TextField layoutX="309.0" layoutY="345.0" text="main page" />
+   </children>
+</AnchorPane>
