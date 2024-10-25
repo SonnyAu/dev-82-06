@@ -19,7 +19,12 @@
          <TextField fx:id="nameField" alignment="CENTER" maxWidth="300" promptText="Account Name" />
          <TextField fx:id="balanceField" alignment="CENTER" maxWidth="300" promptText="Opening Balance" />
          <DatePicker fx:id="datePicker" maxWidth="300" />
-         <Button fx:id="submitNewAccount" onAction="#submitNewAccount" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Submit" textFill="WHITE">
+         <Text fx:id="errorMsg" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="185.13671875">
+            <font>
+               <Font name="Microsoft Sans Serif" size="12.0" />
+            </font>
+         </Text>
+         <Button fx:id="submitNewAccount" mnemonicParsing="false" onAction="#submitNewAccount" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Submit" textFill="WHITE">
             <font>
                <Font name="Microsoft Sans Serif" size="15.0" />
             </font>
