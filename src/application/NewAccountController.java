@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.time.LocalDate;
 
+// pane loaded after clicking "New Account"
 public class NewAccountController {
 
     @FXML DatePicker datePicker;
@@ -20,8 +21,10 @@ public class NewAccountController {
     @FXML Text errorMsg;
     @FXML Button submitNewAccount;
 
+    // initialize date with current date
     public void initialize() {
         datePicker.setValue(LocalDate.now());
+
     }
 
     @FXML
@@ -40,24 +43,30 @@ public class NewAccountController {
         }
     }
 
+    // method for submitting data and creating/adding to csv
     @FXML
     public void submitNewAccount() {
         errorMsg.setText("");
+
+        // name cannot be empty or spaces
         if (nameField.getText().isEmpty() || nameField.getText().trim().isEmpty()) {
             errorMsg.setText("enter a name");
             return;
         }
 
+        // balance cannot be empty or spaces
         if (balanceField.getText().isEmpty() || balanceField.getText().trim().isEmpty()) {
             errorMsg.setText("enter a balance");
             return;
         }
 
+        // balance cannot be < 0
         if (Double.parseDouble(balanceField.getText()) < 0) {
             errorMsg.setText("balance must be more than 0");
             return;
         }
 
+        // create new account and write it to csv using data controller
         AccountModel account = new AccountModel(nameField.getText(), Double.parseDouble(balanceField.getText()), datePicker.getValue());
         DataController<AccountModel> dc = new DataController<>(AccountModel.class);
         dc.writeToCSV(dc.getFilePath(), account.getCSVData());

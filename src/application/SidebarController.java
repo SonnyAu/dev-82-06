@@ -2,18 +2,17 @@ package application;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import java.io.IOException;
 import java.net.URL;
 
+// this is the sidebar
+// IT IS NEVER REMOVED FROM THE ROOT HBOX
 public class SidebarController {
 
     public void initialize() {
 
     }
-
 
     @FXML
     public void newAccountButton() {
@@ -29,6 +28,4 @@ public class SidebarController {
             e.printStackTrace();
         }
     }
-
-
 }

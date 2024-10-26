@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class Main extends Application {
 
+    // set stage to the root controller
     @Override
     public void start(Stage primaryStage) throws IOException {
         RootController root = RootController.getInstance();

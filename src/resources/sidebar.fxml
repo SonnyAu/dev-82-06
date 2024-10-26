@@ -5,30 +5,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<!--<HBox prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SidebarController">-->
-<!--   <children>-->
-<!--      <AnchorPane prefHeight="800.0" prefWidth="226.0" style="-fx-background-color: #66915e;">-->
-<!--         <children>-->
-<!--            <Label alignment="CENTER" contentDisplay="CENTER" layoutY="15.0" prefHeight="46.0" prefWidth="226.0" text="Money Minder" textFill="WHITE">-->
-<!--               <font>-->
-<!--                  <Font name="Microsoft Sans Serif" size="27.0" />-->
-<!--               </font>-->
-<!--            </Label>-->
-<!--            <Button fx:id="newAccountButton" layoutX="28.0" layoutY="223.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="169.0" style="-fx-background-color: #9fa698;" text="New Account" textFill="WHITE">-->
-<!--               <font>-->
-<!--                  <Font name="Microsoft Sans Serif" size="15.0" />-->
-<!--               </font>-->
-<!--            </Button>-->
-<!--         </children>-->
-<!--      </AnchorPane>-->
-<!--      <AnchorPane fx:id="rightPane" layoutX="226.0" prefHeight="800.0" prefWidth="975.0" style="-fx-background-color: #acc497;">-->
-<!--         <children>-->
-<!--            <Button layoutX="462.0" layoutY="388.0" mnemonicParsing="false" text="Button" />-->
-<!--         </children></AnchorPane>-->
-<!--   </children>-->
-<!--</HBox>-->
-
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="225.0" style="-fx-background-color: #93C572;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SidebarController">
    <children>
       <Label alignment="CENTER" layoutX="1.0" layoutY="28.0" prefHeight="36.0" prefWidth="225.0" text="Money Minder" textAlignment="CENTER" textFill="WHITE">

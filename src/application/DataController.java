@@ -1,8 +1,12 @@
 package application;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 
+// this class handles all the data reading, writing, accessing
 public class DataController<T> {
 
     private String[] ACCOUNT_HEADERS;
@@ -11,6 +15,7 @@ public class DataController<T> {
     private String filePath;
     private String DATA_DIR = "src/data/";
 
+    // this constructor is mostly used when creating a new file
     public DataController (Class<T> type) {
         this.type = type;
         this.fileName = getDirLoc(type);
@@ -18,9 +23,15 @@ public class DataController<T> {
         createCSV();
     }
 
+    // this constructor is mostly used when accessing a file by provinding the filename
+    public DataController(String fileName) {
+        this.filePath = DATA_DIR + fileName;
+        this.type = null;
+    }
+
+    // this method sets the headers when creating csv files and also denotes which file we work with
     public String getDirLoc(Class<T> type) {
         String typeName = type.getSimpleName();
-
         // we can add more cases later for other data types we save (transactions etc...)
         switch (typeName) {
             case "AccountModel":
@@ -31,6 +42,7 @@ public class DataController<T> {
         }
     }
 
+    // this method creates a csv and adds headers to it
     private void createCSV() {
         try {
             File f = new File(filePath);
@@ -45,6 +57,7 @@ public class DataController<T> {
         }
     }
 
+    // this method writes headers to blank csvs
     private void createHeaders(String dirPath, String[] headers) {
         try (FileWriter fw = new FileWriter(dirPath, true)){
             for (int i = 0; i < headers.length; i++) {
@@ -59,6 +72,8 @@ public class DataController<T> {
         }
     }
 
+    // this method writes to a csv
+    // DATA INPUT IS AN ARRAY OF STRINGS ex: ["name", "100", "2024-10-24"]
     public void writeToCSV(String dirPath, String[] data) {
         try (FileWriter fw = new FileWriter(dirPath, true)) {
             for (int i = 0; i < data.length; i++) {
@@ -73,7 +88,28 @@ public class DataController<T> {
         }
     }
 
+    // returns the filepath
     public String getFilePath() {
         return filePath;
+    }
+
+    // reads the csv and returns an arraylist of string arrays for each line
+    // ex: [ ["name", "100", "2024-10-24"], ["name", "100", "2024-10-24"] ]
+    public ArrayList<String[]> readFromCSV() {
+        ArrayList<String[]> data = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            // Skip header line
+            br.readLine();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                data.add(values);
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        return data;
     }
 }

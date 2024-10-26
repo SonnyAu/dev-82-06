@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.InitController">
    <children>
-      <TextField layoutX="309.0" layoutY="345.0" text="main page" />
+      <VBox alignment="TOP_CENTER" layoutX="320.0" layoutY="216.0" prefHeight="568.0" prefWidth="535.0" spacing="30.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Accounts" textAlignment="CENTER" wrappingWidth="368.13671875">
+               <font>
+                  <Font name="Microsoft Sans Serif" size="30.0" />
+               </font>
+            </Text>
+            <TableView fx:id="accountTable" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="nameCol" prefWidth="158.0" text="Name" />
+                <TableColumn fx:id="balanceCol" prefWidth="170.0" text="Balance" />
+                  <TableColumn fx:id="dateCol" prefWidth="166.0" text="Date" />
+              </columns>
+            </TableView>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

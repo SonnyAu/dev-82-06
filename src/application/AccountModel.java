@@ -1,14 +1,15 @@
 package application;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 
+// this class is a model for an account
 public class AccountModel {
     private String name;
     private double balance;
     private LocalDate date;
 
-
+    // generic account
     public AccountModel(String name, double balance, LocalDate date) {
         this.name = name;
         this.balance = balance;
@@ -27,14 +28,15 @@ public class AccountModel {
         return date;
     }
 
+    // returns an array of strings for a csv
     public String[] getCSVData() {
-        return new String[]{name, String.valueOf(balance), date.toString()};
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+
+        return new String[]{name, String.valueOf(balance), date.format(formatter)};
     }
 
     @Override
     public String toString() {
         return name + "," + balance + "," + date;
     }
-
-
 }
