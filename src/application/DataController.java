@@ -72,20 +72,45 @@ public class DataController<T> {
         }
     }
 
-    // this method writes to a csv
-    // DATA INPUT IS AN ARRAY OF STRINGS ex: ["name", "100", "2024-10-24"]
+    // this method writes to a csv ensuring no duplicate entries
+// DATA INPUT IS AN ARRAY OF STRINGS ex: ["name", "100", "2024-10-24"]
     public void writeToCSV(String dirPath, String[] data) {
-        try (FileWriter fw = new FileWriter(dirPath, true)) {
-            for (int i = 0; i < data.length; i++) {
-                fw.append(data[i]);
-                if (i != data.length - 1) {
-                    fw.append(",");
+        try {
+            // Read existing data to check for duplicates
+            ArrayList<String[]> existingData = readFromCSV();
+
+            // Check for duplicate entry
+            boolean isDuplicate = existingData.stream().anyMatch(
+                    row -> compareData(row, data) // Compare each row with new data
+            );
+
+            if (!isDuplicate) {
+                try (FileWriter fw = new FileWriter(dirPath, true)) {
+                    for (int i = 0; i < data.length; i++) {
+                        fw.append(data[i]);
+                        if (i != data.length - 1) {
+                            fw.append(",");
+                        }
+                    }
+                    fw.append("\n");
                 }
+            } else {
+                System.out.println("Duplicate entry. Data not written to: " + dirPath);
             }
-            fw.append("\n");
         } catch (Exception e) {
-            e.getStackTrace();
+            e.printStackTrace();
         }
+    }
+
+    // Helper method to compare two data entries
+    private boolean compareData(String[] existingRow, String[] newRow) {
+        if (existingRow.length != newRow.length) return false;
+        for (int i = 0; i < existingRow.length; i++) {
+            if (!existingRow[i].equals(newRow[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // returns the filepath

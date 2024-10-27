@@ -43,6 +43,17 @@ public class NewAccountController {
         }
     }
 
+    // helper method for comparing two data entries
+    private boolean compareData(String[] existingRow, String[] newRow) {
+        if (existingRow.length != newRow.length) return false;
+        for (int i = 0; i < existingRow.length; i++) {
+            if (!existingRow[i].equals(newRow[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // method for submitting data and creating/adding to csv
     @FXML
     public void submitNewAccount() {
@@ -60,9 +71,16 @@ public class NewAccountController {
             return;
         }
 
-        // balance cannot be < 0
-        if (Double.parseDouble(balanceField.getText()) < 0) {
-            errorMsg.setText("balance must be more than 0");
+        // balance is non-negative, real number
+        double balance;
+        try {
+            balance = Double.parseDouble(balanceField.getText());
+            if (balance < 0) {
+                errorMsg.setText("Balance must be more than 0");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            errorMsg.setText("Invalid balance format");
             return;
         }
 
@@ -71,6 +89,17 @@ public class NewAccountController {
         DataController<AccountModel> dc = new DataController<>(AccountModel.class);
         dc.writeToCSV(dc.getFilePath(), account.getCSVData());
 
-        errorMsg.setText("submitted");
+        errorMsg.setText("Submitted successfully.");
+//        // check duplicate entry
+//        boolean isDuplicate = dc.readFromCSV().stream().anyMatch(
+//                row -> compareData(row, account.getCSVData())
+//        );
+//
+//        if (!isDuplicate) {
+//            dc.writeToCSV(dc.getFilePath(), account.getCSVData());
+//            errorMsg.setText("Submitted successfully.");
+//        } else {
+//            errorMsg.setText("Duplicate entry. Account not added.");
+//        }
     }
 }
