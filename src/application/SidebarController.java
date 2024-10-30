@@ -28,4 +28,21 @@ public class SidebarController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void transactionsButton() {
+        // HBox structured like [sidebar, rightpane], this code removes the last element (rightpane) and then adds a new one (newaccountpane)
+        URL dir = getClass().getResource("/resources/transaction.fxml");
+        try {
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().remove(root.getChildren().size() - 1);
+
+            AnchorPane newAccountPane = FXMLLoader.load(dir);
+            root.getChildren().add(newAccountPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

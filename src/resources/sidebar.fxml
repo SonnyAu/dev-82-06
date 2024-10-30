@@ -14,15 +14,31 @@
       </Label>
       <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="183.0" prefHeight="454.0" prefWidth="225.0" AnchorPane.topAnchor="183.0">
          <children>
-            <Button fx:id="newAccountButton" onAction="#newAccountButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="34.0" prefWidth="118.0" style="-fx-background-color: #808080;" text="New Account" textAlignment="CENTER" textFill="WHITE">
+            <!-- New Account Button -->
+            <Button fx:id="newAccountButton" onAction="#newAccountButton"
+                    prefHeight="34.0" prefWidth="118.0"
+                    style="-fx-background-color: #808080;" text="New Account" textFill="WHITE">
+               <font>
+                  <Font name="Microsoft Sans Serif" size="15.0" />
+               </font>
+            </Button>
+
+
+            <!-- Transactions Button -->
+            <Button fx:id="transactionsButton" onAction="#transactionsButton"
+                    prefHeight="34.0" prefWidth="118.0"
+                    style="-fx-background-color: #808080;" text="Transactions" textFill="WHITE">
                <font>
                   <Font name="Microsoft Sans Serif" size="15.0" />
                </font>
             </Button>
          </children>
+
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
+
       </VBox>
+
    </children>
 </AnchorPane>
