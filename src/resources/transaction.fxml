@@ -9,6 +9,7 @@
             xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="application.TransactionController">
     <children>
+        <!-- Home Button to Return to Init Pane -->
         <Button fx:id="setRightPaneAsHome" layoutX="25.0" layoutY="25.0" onAction="#setRightPaneAsHome"
                 prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;"
                 text="Home" textFill="WHITE">
@@ -16,24 +17,48 @@
                 <Font name="Microsoft Sans Serif" size="15.0" />
             </font>
         </Button>
-        <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="373.0" spacing="20"
-              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0"
-              AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="0.0">
+
+        <!-- Main Container for Transaction Form -->
+        <VBox alignment="CENTER" layoutX="200.0" layoutY="50.0" prefHeight="600.0" prefWidth="373.0" spacing="20"
+              AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
+            <!-- Title Label -->
             <Label text="Transactions" textAlignment="CENTER" textFill="BLACK">
                 <font>
                     <Font name="Microsoft Sans Serif" size="20.0" />
                 </font>
             </Label>
 
-            <TextArea fx:id="transactionDetails" prefHeight="400.0" prefWidth="300.0"
-                      wrapText="true" promptText="Transaction details..."/>
+            <!-- Account Dropdown -->
+            <Label text="Account:" />
+            <ComboBox fx:id="accountDropdown" promptText="Select Account" />
 
-            <Button fx:id="submitTransaction" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0"
-                    style="-fx-background-color: #9fa698;" text="Submit" textFill="WHITE">
+            <!-- Transaction Type Dropdown -->
+            <Label text="Transaction Type:" />
+            <ComboBox fx:id="transactionTypeDropdown" promptText="Select Transaction Type" />
+
+            <!-- Date Picker for Transaction Date -->
+            <Label text="Transaction Date:" />
+            <DatePicker fx:id="transactionDate" />
+
+            <!-- Text Field for Transaction Description -->
+            <Label text="Description:" />
+            <TextField fx:id="transactionDescription" promptText="Enter description" />
+
+            <!-- Text Field for Payment Amount -->
+            <Label text="Payment Amount:" />
+            <TextField fx:id="paymentAmount" promptText="Enter payment amount" />
+
+            <!-- Text Field for Deposit Amount -->
+            <Label text="Deposit Amount:" />
+            <TextField fx:id="depositAmount" promptText="Enter deposit amount" />
+
+            <!-- Submit Button for Saving Transaction -->
+            <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0"
+                    style="-fx-background-color: #9fa698;" text="Save" textFill="WHITE" onAction="#saveTransaction">
                 <font>
                     <Font name="Microsoft Sans Serif" size="15.0" />
                 </font>
