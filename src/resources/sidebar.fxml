@@ -5,29 +5,42 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="225.0" style="-fx-background-color: #93C572;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SidebarController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="1000.0" prefWidth="225.0" style="-fx-background-color: #93C572;"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="application.SidebarController">
    <children>
-      <Label alignment="CENTER" layoutX="1.0" layoutY="28.0" prefHeight="36.0" prefWidth="225.0" text="Money Minder" textAlignment="CENTER" textFill="WHITE">
+      <Label alignment="CENTER" layoutX="1.0" layoutY="28.0" prefHeight="36.0" prefWidth="225.0"
+             text="Money Minder" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="Microsoft Sans Serif" size="33.0" />
          </font>
       </Label>
-      <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="183.0" prefHeight="454.0" prefWidth="225.0" AnchorPane.topAnchor="183.0">
+      <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="183.0" prefHeight="454.0" prefWidth="225.0"
+            AnchorPane.topAnchor="183.0" spacing="15.0">
          <children>
             <!-- New Account Button -->
             <Button fx:id="newAccountButton" onAction="#newAccountButton"
-                    prefHeight="34.0" prefWidth="118.0"
+                    prefHeight="34.0" prefWidth="200.0"
                     style="-fx-background-color: #808080;" text="New Account" textFill="WHITE">
                <font>
                   <Font name="Microsoft Sans Serif" size="15.0" />
                </font>
             </Button>
 
+            <!-- Transaction Types Button - Moved to Second Position -->
+            <Button fx:id="transactionTypesButton" onAction="#transactionTypesButton"
+                    prefHeight="34.0" prefWidth="200.0"
+                    style="-fx-background-color: #808080;" text="Transaction Types" textFill="WHITE">
+               <font>
+                  <Font name="Microsoft Sans Serif" size="15.0" />
+               </font>
+            </Button>
 
-            <!-- Transactions Button -->
-            <Button fx:id="transactionsButton" onAction="#transactionsButton"
-                    prefHeight="34.0" prefWidth="118.0"
-                    style="-fx-background-color: #808080;" text="Transactions" textFill="WHITE">
+            <!-- Enter Transactions Button -->
+            <Button fx:id="enterTransactionsButton" onAction="#enterTransactionsButton"
+                    prefHeight="34.0" prefWidth="200.0"
+                    style="-fx-background-color: #808080;" text="Enter Transactions" textFill="WHITE">
                <font>
                   <Font name="Microsoft Sans Serif" size="15.0" />
                </font>
@@ -37,8 +50,6 @@
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
-
       </VBox>
-
    </children>
 </AnchorPane>

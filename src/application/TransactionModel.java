@@ -1,31 +1,78 @@
 package application;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionModel {
-    // Static list to simulate transaction types
     private static List<String> transactionTypes = new ArrayList<>();
-    private static List<String[]> transactions = new ArrayList<>(); // Simulated storage for transactions
+    private static List<String[]> transactions = new ArrayList<>();
+    private static final String TRANSACTION_TYPES_FILE = "src/data/transaction_types.csv";
+    private static final String TRANSACTIONS_FILE = "src/data/transactions.csv";
 
     static {
-        // Adding default transaction types
-        transactionTypes.add("House");
-        transactionTypes.add("Car");
-        transactionTypes.add("Kids");
-        transactionTypes.add("Education");
+        loadTransactionTypes();
+        loadTransactions();
     }
 
-    // Method to get transaction types
     public static List<String> getTransactionTypes() {
-        return transactionTypes;
+        return new ArrayList<>(transactionTypes);
     }
 
-    // Method to save a transaction
+    public static void addTransactionType(String type) {
+        transactionTypes.add(type.trim());
+        saveTransactionTypes();
+    }
+
     public static void saveTransaction(String account, String transactionType, LocalDate date, String description, String payment, String deposit) {
-        // Simulate saving by adding to the transactions list
         transactions.add(new String[]{account, transactionType, date.toString(), description, payment, deposit});
-        System.out.println("Transaction saved: " + account + ", " + transactionType + ", " + date + ", " + description + ", " + payment + ", " + deposit);
+        saveTransactions();
+    }
+
+    private static void saveTransactionTypes() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTION_TYPES_FILE))) {
+            for (String type : transactionTypes) {
+                writer.write(type);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadTransactionTypes() {
+        transactionTypes.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTION_TYPES_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                transactionTypes.add(line.trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void saveTransactions() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTIONS_FILE))) {
+            for (String[] transaction : transactions) {
+                writer.write(String.join(",", transaction));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadTransactions() {
+        transactions.clear();
+        try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTIONS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                transactions.add(line.split(","));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

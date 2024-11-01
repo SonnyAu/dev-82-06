@@ -49,6 +49,18 @@ public class TransactionController {
 
         // Set save button action
         saveButton.setOnAction(e -> saveTransaction());
+
+        // Add listeners to restrict input to numeric values (double) for paymentAmount and depositAmount
+        restrictToDoubleInput(paymentAmount);
+        restrictToDoubleInput(depositAmount);
+    }
+
+    private void restrictToDoubleInput(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                textField.setText(oldValue); // Revert to old value if input is not valid
+            }
+        });
     }
 
     @FXML

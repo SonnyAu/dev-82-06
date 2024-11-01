@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="application.TransactionTypesController">
+    <children>
+        <VBox alignment="CENTER" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+            <Label text="Define Transaction Types" style="-fx-font-size: 18px; -fx-text-fill: black;" />
+
+            <!-- Shortened TextField to enter the transaction type -->
+            <TextField fx:id="transactionTypeField" promptText="Enter Transaction Type" maxWidth="250.0" />
+
+            <!-- Button to save the transaction type -->
+            <Button text="Save" onAction="#saveTransactionType" prefWidth="100" />
+
+            <!-- Label to display validation or confirmation messages -->
+            <Label fx:id="statusLabel" textFill="red" />
+        </VBox>
+    </children>
+</AnchorPane>
