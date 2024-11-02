@@ -98,25 +98,33 @@ public class TransactionController {
     }
 
     private boolean validateFields() {
+        // Check if all required fields are filled
         if (accountDropdown.getValue() == null || transactionTypeDropdown.getValue() == null ||
-                transactionDate.getValue() == null || transactionDescription.getText().isEmpty()) {
+                transactionTypeDropdown.getValue().isEmpty() || transactionDate.getValue() == null ||
+                transactionDescription.getText().isEmpty()) {
+            showAlert("Please fill all required fields correctly.", Alert.AlertType.ERROR);
             return false;
         }
 
-        if (transactionTypeDropdown.getValue() == null || transactionTypeDropdown.getValue().isEmpty()) {
+        // Check if both Payment Amount and Deposit Amount are empty
+        if (paymentAmount.getText().isEmpty() && depositAmount.getText().isEmpty()) {
+            showAlert("Please enter either a Payment Amount or a Deposit Amount.", Alert.AlertType.ERROR);
             return false;
         }
 
-        if ((paymentAmount.getText().isEmpty() && depositAmount.getText().isEmpty()) ||
-                (!paymentAmount.getText().isEmpty() && !depositAmount.getText().isEmpty())) {
+        // Check if both Payment Amount and Deposit Amount are filled
+        if (!paymentAmount.getText().isEmpty() && !depositAmount.getText().isEmpty()) {
             showAlert("Please fill either Payment Amount or Deposit Amount, not both.", Alert.AlertType.ERROR);
             return false;
         }
 
+        // Validate numeric input for Payment Amount
         if (!paymentAmount.getText().isEmpty() && !isNumeric(paymentAmount.getText())) {
             showAlert("Payment Amount must be a number.", Alert.AlertType.ERROR);
             return false;
         }
+
+        // Validate numeric input for Deposit Amount
         if (!depositAmount.getText().isEmpty() && !isNumeric(depositAmount.getText())) {
             showAlert("Deposit Amount must be a number.", Alert.AlertType.ERROR);
             return false;
@@ -126,6 +134,9 @@ public class TransactionController {
     }
 
     private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
         try {
             Double.parseDouble(str);
             return true;
