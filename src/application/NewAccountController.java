@@ -12,7 +12,6 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.time.LocalDate;
 
-// pane loaded after clicking "New Account"
 public class NewAccountController {
 
     @FXML DatePicker datePicker;
@@ -25,14 +24,25 @@ public class NewAccountController {
     public void initialize() {
         datePicker.setValue(LocalDate.now());
 
+        // Restrict nameField to alphabetic characters only (no digits or numbers)
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[a-zA-Z\\s]*")) { // Allow only letters and spaces
+                nameField.setText(oldValue); // Revert to old value if invalid input is detected
+            }
+        });
+
+        // Restrict balanceField to numeric values with an optional decimal point
+        balanceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) { // Allow only numbers and a single decimal point
+                balanceField.setText(oldValue); // Revert to old value if invalid input is detected
+            }
+        });
     }
 
     @FXML
     public void setRightPaneAsHome() {
-        // set right pane back to init pane
         URL dir = getClass().getResource("/resources/init.fxml");
         try {
-            // HBox structured like [sidebar, rightpane], this code removes the last element (rightpane) and then adds a new one (init)
             HBox root = RootController.getInstance().getContainer();
             root.getChildren().remove(root.getChildren().size() - 1);
 
@@ -43,7 +53,6 @@ public class NewAccountController {
         }
     }
 
-    // helper method for comparing two data entries
     private boolean compareData(String[] existingRow, String[] newRow) {
         if (existingRow.length != newRow.length) return false;
         for (int i = 0; i < existingRow.length; i++) {
@@ -54,52 +63,39 @@ public class NewAccountController {
         return true;
     }
 
-    // method for submitting data and creating/adding to csv
     @FXML
     public void submitNewAccount() {
         errorMsg.setText("");
 
-        // name cannot be empty or spaces
+        // Validate that name is not empty
         if (nameField.getText().isEmpty() || nameField.getText().trim().isEmpty()) {
-            errorMsg.setText("enter a name");
+            errorMsg.setText("Enter a valid name.");
             return;
         }
 
-        // balance cannot be empty or spaces
+        // Validate that balance is not empty and is a valid number
         if (balanceField.getText().isEmpty() || balanceField.getText().trim().isEmpty()) {
-            errorMsg.setText("enter a balance");
+            errorMsg.setText("Enter a balance.");
             return;
         }
 
-        // balance is non-negative, real number
         double balance;
         try {
             balance = Double.parseDouble(balanceField.getText());
             if (balance < 0) {
-                errorMsg.setText("Balance must be more than 0");
+                errorMsg.setText("Balance must be more than 0.");
                 return;
             }
         } catch (NumberFormatException e) {
-            errorMsg.setText("Invalid balance format");
+            errorMsg.setText("Invalid balance format.");
             return;
         }
 
-        // create new account and write it to csv using data controller
-        AccountModel account = new AccountModel(nameField.getText(), Double.parseDouble(balanceField.getText()), datePicker.getValue());
+        // Create a new account and save it using DataController
+        AccountModel account = new AccountModel(nameField.getText(), balance, datePicker.getValue());
         DataController<AccountModel> dc = new DataController<>(AccountModel.class);
         dc.writeToCSV(dc.getFilePath(), account.getCSVData());
 
         errorMsg.setText("Submitted successfully.");
-//        // check duplicate entry
-//        boolean isDuplicate = dc.readFromCSV().stream().anyMatch(
-//                row -> compareData(row, account.getCSVData())
-//        );
-//
-//        if (!isDuplicate) {
-//            dc.writeToCSV(dc.getFilePath(), account.getCSVData());
-//            errorMsg.setText("Submitted successfully.");
-//        } else {
-//            errorMsg.setText("Duplicate entry. Account not added.");
-//        }
     }
 }

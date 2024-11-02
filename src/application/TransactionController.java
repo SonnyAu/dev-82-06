@@ -103,6 +103,10 @@ public class TransactionController {
             return false;
         }
 
+        if (transactionTypeDropdown.getValue() == null || transactionTypeDropdown.getValue().isEmpty()) {
+            return false;
+        }
+
         if ((paymentAmount.getText().isEmpty() && depositAmount.getText().isEmpty()) ||
                 (!paymentAmount.getText().isEmpty() && !depositAmount.getText().isEmpty())) {
             showAlert("Please fill either Payment Amount or Deposit Amount, not both.", Alert.AlertType.ERROR);
