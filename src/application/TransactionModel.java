@@ -20,6 +20,16 @@ public class TransactionModel {
         return new ArrayList<>(transactionTypes);
     }
 
+    public static boolean isDuplicateTransactionType(String type) {
+        String lowerType = type.toLowerCase();
+        for (String existingType : transactionTypes) {
+            if (existingType.toLowerCase().equals(lowerType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void addTransactionType(String type) {
         transactionTypes.add(type.trim());
         saveTransactionTypes();
@@ -76,3 +86,4 @@ public class TransactionModel {
         }
     }
 }
+

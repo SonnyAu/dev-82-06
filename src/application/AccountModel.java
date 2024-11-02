@@ -7,21 +7,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// This class is a model for an account
 public class AccountModel {
     private String name;
     private double balance;
     private LocalDate date;
 
-    // Static list to simulate stored accounts
     private static List<AccountModel> accounts = new ArrayList<>();
 
-    // Generic account
     public AccountModel(String name, double balance, LocalDate date) {
-        this.name = name;
+        this.name = name.toLowerCase(); // Store the name in lowercase
         this.balance = balance;
         this.date = date;
-        accounts.add(this); // Add this account to the list
+        accounts.add(this);
     }
 
     public String getName() {
@@ -36,7 +33,18 @@ public class AccountModel {
         return date;
     }
 
-    // Returns an array of strings for a CSV
+    // Method to check for duplicate account names (case insensitive)
+    public static boolean isDuplicateAccountName(String newName) {
+        String lowerNewName = newName.toLowerCase(); // Convert input to lowercase
+        for (AccountModel account : accounts) {
+            if (account.getName().equals(lowerNewName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Add this method to return data in CSV format
     public String[] getCSVData() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         return new String[]{name, String.valueOf(balance), date.format(formatter)};

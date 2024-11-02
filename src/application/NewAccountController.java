@@ -67,19 +67,16 @@ public class NewAccountController {
     public void submitNewAccount() {
         errorMsg.setText("");
 
-        // Validate that name is not empty
         if (nameField.getText().isEmpty() || nameField.getText().trim().isEmpty()) {
             errorMsg.setText("Enter a valid name.");
             return;
         }
 
-        // Check for duplicate account name
-        if (AccountModel.getAccountNames().contains(nameField.getText().trim())) {
+        if (AccountModel.isDuplicateAccountName(nameField.getText().trim())) {
             errorMsg.setText("Account name already exists. Please choose a different name.");
             return;
         }
 
-        // Validate that balance is not empty and is a valid number
         if (balanceField.getText().isEmpty() || balanceField.getText().trim().isEmpty()) {
             errorMsg.setText("Enter a balance.");
             return;
@@ -97,12 +94,12 @@ public class NewAccountController {
             return;
         }
 
-        // Create a new account and save it using DataController
         AccountModel account = new AccountModel(nameField.getText(), balance, datePicker.getValue());
         DataController<AccountModel> dc = new DataController<>(AccountModel.class);
         dc.writeToCSV(dc.getFilePath(), account.getCSVData());
 
         errorMsg.setText("Submitted successfully.");
     }
+
 
 }
