@@ -45,8 +45,8 @@
             <DatePicker fx:id="transactionDate" />
 
             <!-- Text Field for Payment Description -->
-            <Label text="Payment Description:" />
-            <TextField fx:id="transactionDescription" promptText="Enter payment description" />
+            <Label text="Transaction Description:" />
+            <TextField fx:id="transactionDescription" promptText="Enter transaction description" />
 
             <!-- Text Field for Payment Amount -->
             <Label text="Payment Amount:" />
