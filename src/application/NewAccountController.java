@@ -73,6 +73,12 @@ public class NewAccountController {
             return;
         }
 
+        // Check for duplicate account name
+        if (AccountModel.getAccountNames().contains(nameField.getText().trim())) {
+            errorMsg.setText("Account name already exists. Please choose a different name.");
+            return;
+        }
+
         // Validate that balance is not empty and is a valid number
         if (balanceField.getText().isEmpty() || balanceField.getText().trim().isEmpty()) {
             errorMsg.setText("Enter a balance.");
@@ -98,4 +104,5 @@ public class NewAccountController {
 
         errorMsg.setText("Submitted successfully.");
     }
+
 }
