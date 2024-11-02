@@ -26,7 +26,13 @@ public class TransactionTypesController {
             return;
         }
 
-        // Add the new transaction type directly
+        // Check for duplicate transaction type
+        if (TransactionModel.getTransactionTypes().contains(newType)) {
+            statusLabel.setText("Transaction type already exists. Please enter a unique type.");
+            return;
+        }
+
+        // Add the new transaction type since it's not a duplicate
         TransactionModel.addTransactionType(newType);
         statusLabel.setText("Transaction type added successfully.");
 
