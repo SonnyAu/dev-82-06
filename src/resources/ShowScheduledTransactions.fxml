@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.ShowScheduledTransactionsController">
+    <children>
+        <TableView fx:id="scheduledTransactionTable" layoutX="20.0" layoutY="20.0" prefHeight="600.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="scheduleNameColumn" text="Schedule Name"/>
+                <TableColumn fx:id="accountColumn" text="Account"/>
+                <TableColumn fx:id="transactionTypeColumn" text="Transaction Type"/>
+                <TableColumn fx:id="frequencyColumn" text="Frequency"/>
+                <TableColumn fx:id="dueDateColumn" text="Due Date"/>
+                <TableColumn fx:id="paymentAmountColumn" text="Payment Amount"/>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

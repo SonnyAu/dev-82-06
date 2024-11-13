@@ -19,7 +19,6 @@
       <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="183.0" prefHeight="454.0" prefWidth="225.0"
             AnchorPane.topAnchor="183.0" spacing="15.0">
          <children>
-            <!-- New Account Button -->
             <Button fx:id="newAccountButton" onAction="#newAccountButton"
                     prefHeight="34.0" prefWidth="200.0"
                     style="-fx-background-color: #808080;" text="New Account" textFill="WHITE">
@@ -28,7 +27,6 @@
                </font>
             </Button>
 
-            <!-- Transaction Types Button - Moved to Second Position -->
             <Button fx:id="transactionTypesButton" onAction="#transactionTypesButton"
                     prefHeight="34.0" prefWidth="200.0"
                     style="-fx-background-color: #808080;" text="Transaction Types" textFill="WHITE">
@@ -37,10 +35,25 @@
                </font>
             </Button>
 
-            <!-- Enter Transactions Button -->
             <Button fx:id="enterTransactionsButton" onAction="#enterTransactionsButton"
                     prefHeight="34.0" prefWidth="200.0"
                     style="-fx-background-color: #808080;" text="Enter Transactions" textFill="WHITE">
+               <font>
+                  <Font name="Microsoft Sans Serif" size="15.0" />
+               </font>
+            </Button>
+
+            <Button fx:id="enterScheduledTransactionsButton" onAction="#enterScheduledTransactionsButton"
+                    prefHeight="34.0" prefWidth="200.0"
+                    style="-fx-background-color: #808080;" text="Enter Scheduled Transactions" textFill="WHITE">
+               <font>
+                  <Font name="Microsoft Sans Serif" size="15.0" />
+               </font>
+            </Button>
+
+            <Button fx:id="showScheduledTransactionsButton" onAction="#showScheduledTransactionsButton"
+                    prefHeight="34.0" prefWidth="200.0"
+                    style="-fx-background-color: #808080;" text="Show Scheduled Transactions" textFill="WHITE">
                <font>
                   <Font name="Microsoft Sans Serif" size="15.0" />
                </font>

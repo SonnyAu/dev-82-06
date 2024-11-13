@@ -11,8 +11,13 @@ public class TransactionModel {
     private static final String TRANSACTION_TYPES_FILE = "src/data/transaction_types.csv";
     private static final String TRANSACTIONS_FILE = "src/data/transactions.csv";
 
+    // Static initializer block to pre-populate transaction types
     static {
-        loadTransactionTypes();
+        transactionTypes.add("Groceries");
+        transactionTypes.add("Utilities");
+        transactionTypes.add("Rent");
+        transactionTypes.add("Entertainment");
+
         loadTransactions();
     }
 
@@ -31,8 +36,10 @@ public class TransactionModel {
     }
 
     public static void addTransactionType(String type) {
-        transactionTypes.add(type.trim());
-        saveTransactionTypes();
+        if (!isDuplicateTransactionType(type)) {
+            transactionTypes.add(type.trim());
+            saveTransactionTypes();
+        }
     }
 
     public static void saveTransaction(String account, String transactionType, LocalDate date, String description, String payment, String deposit) {
@@ -86,4 +93,3 @@ public class TransactionModel {
         }
     }
 }
-

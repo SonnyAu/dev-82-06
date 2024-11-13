@@ -12,42 +12,37 @@ public class SidebarController {
 
     @FXML
     public void newAccountButton() {
-        URL dir = getClass().getResource("/resources/newAccount.fxml");
-        try {
-            HBox root = RootController.getInstance().getContainer();
-            root.getChildren().remove(root.getChildren().size() - 1);
-
-            AnchorPane newAccountPane = FXMLLoader.load(dir);
-            root.getChildren().add(newAccountPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void enterTransactionsButton() {
-        // Updated to load enterTransactions.fxml
-        URL dir = getClass().getResource("/resources/enterTransactions.fxml");
-        try {
-            HBox root = RootController.getInstance().getContainer();
-            root.getChildren().remove(root.getChildren().size() - 1);
-
-            AnchorPane enterTransactionsPane = FXMLLoader.load(dir);
-            root.getChildren().add(enterTransactionsPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadPage("/resources/newAccount.fxml");
     }
 
     @FXML
     public void transactionTypesButton() {
-        URL dir = getClass().getResource("/resources/transactionTypes.fxml");
+        loadPage("/resources/transactionTypes.fxml");
+    }
+
+    @FXML
+    public void enterTransactionsButton() {
+        loadPage("/resources/enterTransactions.fxml");
+    }
+
+    @FXML
+    public void enterScheduledTransactionsButton() {
+        loadPage("/resources/enterScheduledTransactions.fxml");
+    }
+
+    @FXML
+    public void showScheduledTransactionsButton() {
+        loadPage("/resources/showScheduledTransactions.fxml");
+    }
+
+    private void loadPage(String fxmlPath) {
         try {
+            URL dir = getClass().getResource(fxmlPath);
             HBox root = RootController.getInstance().getContainer();
             root.getChildren().remove(root.getChildren().size() - 1);
 
-            AnchorPane transactionTypesPane = FXMLLoader.load(dir);
-            root.getChildren().add(transactionTypesPane);
+            AnchorPane pane = FXMLLoader.load(dir);
+            root.getChildren().add(pane);
         } catch (Exception e) {
             e.printStackTrace();
         }

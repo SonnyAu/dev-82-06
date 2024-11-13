@@ -14,11 +14,17 @@ public class AccountModel {
 
     private static List<AccountModel> accounts = new ArrayList<>();
 
+    // Static initializer block to pre-populate accounts
+    static {
+        accounts.add(new AccountModel("Savings", 1000.0, LocalDate.now()));
+        accounts.add(new AccountModel("Checking", 500.0, LocalDate.now()));
+        accounts.add(new AccountModel("Business", 2000.0, LocalDate.now()));
+    }
+
     public AccountModel(String name, double balance, LocalDate date) {
         this.name = name.toLowerCase(); // Store the name in lowercase
         this.balance = balance;
         this.date = date;
-        accounts.add(this);
     }
 
     public String getName() {
@@ -35,7 +41,7 @@ public class AccountModel {
 
     // Method to check for duplicate account names (case insensitive)
     public static boolean isDuplicateAccountName(String newName) {
-        String lowerNewName = newName.toLowerCase(); // Convert input to lowercase
+        String lowerNewName = newName.toLowerCase();
         for (AccountModel account : accounts) {
             if (account.getName().equals(lowerNewName)) {
                 return true;
@@ -56,7 +62,7 @@ public class AccountModel {
         for (AccountModel account : accounts) {
             accountNames.add(account.getName());
         }
-        return new ArrayList<>(accountNames); // Convert back to list
+        return new ArrayList<>(accountNames);
     }
 
     @Override
