@@ -7,23 +7,25 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.Comparator;
+
 public class ShowScheduledTransactionsController {
 
     @FXML
-    private TableView<ScheduledTransaction> scheduledTransactionTable;
+    private TableView<ScheduledTransactionModel> scheduledTransactionTable;
 
     @FXML
-    private TableColumn<ScheduledTransaction, String> scheduleNameColumn;
+    private TableColumn<ScheduledTransactionModel, String> scheduleNameColumn;
     @FXML
-    private TableColumn<ScheduledTransaction, String> accountColumn;
+    private TableColumn<ScheduledTransactionModel, String> accountColumn;
     @FXML
-    private TableColumn<ScheduledTransaction, String> transactionTypeColumn;
+    private TableColumn<ScheduledTransactionModel, String> transactionTypeColumn;
     @FXML
-    private TableColumn<ScheduledTransaction, String> frequencyColumn;
+    private TableColumn<ScheduledTransactionModel, String> frequencyColumn;
     @FXML
-    private TableColumn<ScheduledTransaction, String> dueDateColumn;
+    private TableColumn<ScheduledTransactionModel, Integer> dueDateColumn;
     @FXML
-    private TableColumn<ScheduledTransaction, String> paymentAmountColumn;
+    private TableColumn<ScheduledTransactionModel, Double> paymentAmountColumn;
 
     @FXML
     public void initialize() {
@@ -34,7 +36,12 @@ public class ShowScheduledTransactionsController {
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         paymentAmountColumn.setCellValueFactory(new PropertyValueFactory<>("paymentAmount"));
 
-        ObservableList<ScheduledTransaction> transactions = FXCollections.observableArrayList(ScheduledTransactionModel.getScheduledTransactions());
+        loadAndDisplayTransactions();
+    }
+
+    private void loadAndDisplayTransactions() {
+        ObservableList<ScheduledTransactionModel> transactions = FXCollections.observableArrayList(ScheduledTransactionModel.getScheduledTransactions());
+        transactions.sort(Comparator.comparingInt(ScheduledTransactionModel::getDueDate)); // Sort ascending by due date
         scheduledTransactionTable.setItems(transactions);
     }
 }

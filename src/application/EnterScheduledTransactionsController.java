@@ -38,26 +38,47 @@ public class EnterScheduledTransactionsController {
 
         frequencyDropdown.getItems().add("Monthly");  // Default frequency option
         frequencyDropdown.getSelectionModel().selectFirst();
+
+        // Real-time validation for Schedule Name (only letters, spaces, and hyphens)
+        scheduleNameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[a-zA-Z\\s-]*")) { // Allows only letters, spaces, and hyphens
+                scheduleNameField.setText(oldValue);
+            }
+        });
+
+        // Real-time validation for Due Date (only integers, no further checks)
+        dueDateField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { // Allows only digits
+                dueDateField.setText(oldValue);
+            }
+        });
+
+        // Real-time validation for Payment Amount (only doubles)
+        paymentAmountField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) { // Allows only numbers and one decimal point
+                paymentAmountField.setText(oldValue);
+            }
+        });
     }
 
     @FXML
     private void saveScheduledTransaction() {
-        String scheduleName = scheduleNameField.getText().trim();
+        String scheduleName = scheduleNameField.getText();
         String account = accountDropdown.getValue();
         String transactionType = transactionTypeDropdown.getValue();
         String frequency = frequencyDropdown.getValue();
-        String dueDate = dueDateField.getText().trim();
-        String paymentAmount = paymentAmountField.getText().trim();
+        String dueDate = dueDateField.getText();
+        String paymentAmount = paymentAmountField.getText();
 
         // Validate fields
         if (validateFields(scheduleName, dueDate, paymentAmount)) {
-            if (ScheduledTransactionModel.isDuplicateScheduleName(scheduleName)) {
-                showAlert("Duplicate schedule name. Please enter a unique name.", Alert.AlertType.ERROR);
-            } else {
+            if (!ScheduledTransactionModel.isDuplicateScheduleName(scheduleName)) {
                 // Save the scheduled transaction
                 ScheduledTransactionModel.saveScheduledTransaction(scheduleName, account, transactionType, frequency, dueDate, paymentAmount);
                 showAlert("Scheduled transaction saved successfully!", Alert.AlertType.INFORMATION);
                 resetForm();
+            } else {
+                showAlert("Schedule name already exists. Please use a unique name.", Alert.AlertType.ERROR);
             }
         } else {
             showAlert("Please fill all fields correctly.", Alert.AlertType.ERROR);
@@ -69,8 +90,9 @@ public class EnterScheduledTransactionsController {
             return false;
         }
         try {
-            Integer.parseInt(dueDate);  // Ensure due date is an integer
-            Double.parseDouble(paymentAmount);  // Ensure payment amount is a double
+            // Convert dueDate and paymentAmount to their required formats without additional range checks
+            Integer.parseInt(dueDate); // Ensure due date is an integer
+            Double.parseDouble(paymentAmount); // Ensure payment amount is a double
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -92,4 +114,3 @@ public class EnterScheduledTransactionsController {
         alert.showAndWait();
     }
 }
-
