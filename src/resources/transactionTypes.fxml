@@ -3,23 +3,38 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;"
-            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="application.TransactionTypesController">
+<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TransactionTypesController">
     <children>
-        <VBox alignment="CENTER" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
-            <Label text="Define Transaction Types" style="-fx-font-size: 18px; -fx-text-fill: black;" />
+        <!-- Home Button -->
+        <Button fx:id="setRightPaneAsHome" layoutX="25.0" layoutY="25.0" onAction="#setRightPaneAsHome" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Home" textFill="WHITE">
+            <font>
+                <Font name="Microsoft Sans Serif" size="15.0" />
+            </font>
+        </Button>
 
-            <!-- Shortened TextField to enter the transaction type -->
-            <TextField fx:id="transactionTypeField" promptText="Enter Transaction Type" maxWidth="250.0" />
+        <!-- Main Form Container -->
+        <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="373.0" spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
 
-            <!-- Button to save the transaction type -->
-            <Button text="Save" onAction="#saveTransactionType" prefWidth="100" />
+            <!-- Title Label -->
+            <Label text="Define Transaction Types" style="-fx-font-size: 20px; -fx-text-fill: black;" textAlignment="CENTER" />
 
-            <!-- Label to display validation or confirmation messages -->
-            <Label fx:id="statusLabel" textFill="red" />
+            <!-- Transaction Type Field -->
+            <TextField fx:id="transactionTypeField" promptText="Enter Transaction Type" maxWidth="300" />
+
+            <!-- Save Button -->
+            <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Save" textFill="WHITE" onAction="#saveTransactionType">
+                <font>
+                    <Font name="Microsoft Sans Serif" size="15.0" />
+                </font>
+            </Button>
+
+            <!-- Status Label -->
+            <Label fx:id="statusLabel" textFill="RED" textAlignment="CENTER" maxWidth="300" wrapText="true" />
         </VBox>
     </children>
 </AnchorPane>

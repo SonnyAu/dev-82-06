@@ -1,9 +1,14 @@
 package application;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+
+import java.net.URL;
 
 public class TransactionTypesController {
 
@@ -15,6 +20,20 @@ public class TransactionTypesController {
 
     @FXML
     private Button saveButton;
+
+    @FXML
+    public void setRightPaneAsHome() {
+        URL dir = getClass().getResource("/resources/init.fxml");
+        try {
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().remove(root.getChildren().size() - 1);
+
+            AnchorPane newAccountPane = FXMLLoader.load(dir);
+            root.getChildren().add(newAccountPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void saveTransactionType() {

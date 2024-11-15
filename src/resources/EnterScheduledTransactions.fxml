@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.EnterScheduledTransactionsController">
+<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EnterScheduledTransactionsController">
     <children>
-        <VBox alignment="TOP_CENTER" spacing="10.0" layoutX="20.0" layoutY="20.0" prefWidth="400.0">
+        <!-- Home Button -->
+        <Button fx:id="setRightPaneAsHome" layoutX="25.0" layoutY="25.0" onAction="#setRightPaneAsHome" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Home" textFill="WHITE">
+            <font>
+                <Font name="Microsoft Sans Serif" size="15.0" />
+            </font>
+        </Button>
+
+        <!-- Main Form Container -->
+        <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="373.0" spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <!-- Title Label -->
+            <Label text="Enter Scheduled Transactions" style="-fx-font-size: 20px; -fx-text-fill: black;" textAlignment="CENTER" />
+
             <!-- Schedule Name Field -->
-            <HBox spacing="10">
-                <Label text="Schedule's Name:" />
-                <TextField fx:id="scheduleNameField" promptText="e.g., Rent" />
-            </HBox>
+            <Label text="Schedule Name:" />
+            <TextField fx:id="scheduleNameField" promptText="Enter schedule name" maxWidth="300" />
 
             <!-- Account Dropdown -->
-            <HBox spacing="10">
-                <Label text="Account:" />
-                <ComboBox fx:id="accountDropdown" promptText="Select Account" />
-            </HBox>
+            <Label text="Account:" />
+            <ComboBox fx:id="accountDropdown" promptText="Select Account" maxWidth="300" />
 
             <!-- Transaction Type Dropdown -->
-            <HBox spacing="10">
-                <Label text="Transaction Type:" />
-                <ComboBox fx:id="transactionTypeDropdown" promptText="Select Transaction Type" />
-            </HBox>
+            <Label text="Transaction Type:" />
+            <ComboBox fx:id="transactionTypeDropdown" promptText="Select Transaction Type" maxWidth="300" />
 
             <!-- Frequency Dropdown -->
-            <HBox spacing="10">
-                <Label text="Frequency:" />
-                <ComboBox fx:id="frequencyDropdown" promptText="Select Frequency" />
-            </HBox>
+            <Label text="Frequency:" />
+            <ComboBox fx:id="frequencyDropdown" promptText="Select Frequency" maxWidth="300" />
 
             <!-- Due Date Field -->
-            <HBox spacing="10">
-                <Label text="Due Date:" />
-                <TextField fx:id="dueDateField" promptText="e.g., 15" />
-            </HBox>
+            <Label text="Due Date:" />
+            <TextField fx:id="dueDateField" promptText="Enter due date (e.g., day of the month)" maxWidth="300" />
 
             <!-- Payment Amount Field -->
-            <HBox spacing="10">
-                <Label text="Payment Amount:" />
-                <TextField fx:id="paymentAmountField" promptText="e.g., 100.00" />
-            </HBox>
+            <Label text="Payment Amount:" />
+            <TextField fx:id="paymentAmountField" promptText="Enter payment amount" maxWidth="300" />
 
             <!-- Save Button -->
-            <Button fx:id="saveButton" text="Save" onAction="#saveScheduledTransaction" />
+            <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Save" textFill="WHITE" onAction="#saveScheduledTransaction">
+                <font>
+                    <Font name="Microsoft Sans Serif" size="15.0" />
+                </font>
+            </Button>
         </VBox>
     </children>
 </AnchorPane>
