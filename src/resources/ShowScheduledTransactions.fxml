@@ -16,14 +16,14 @@
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-            <TableView fx:id="scheduledTransactionTable" maxWidth="800.0" maxHeight="600.0">
+            <TableView fx:id="scheduledTransactionTable" maxHeight="600.0" maxWidth="800.0">
                 <columns>
-                    <TableColumn fx:id="scheduleNameColumn" text="Schedule Name" />
-                    <TableColumn fx:id="accountColumn" text="Account" />
-                    <TableColumn fx:id="transactionTypeColumn" text="Transaction Type" />
-                    <TableColumn fx:id="frequencyColumn" text="Frequency" />
-                    <TableColumn fx:id="dueDateColumn" text="Due Date" />
-                    <TableColumn fx:id="paymentAmountColumn" text="Payment Amount" />
+                    <TableColumn fx:id="accountColumn" prefWidth="122.0" text="Account" />
+                    <TableColumn fx:id="paymentAmountColumn" prefWidth="120.0" text="Payment Amount" />
+                    <TableColumn fx:id="scheduleNameColumn" prefWidth="152.0" text="Schedule Name" />
+                    <TableColumn fx:id="transactionTypeColumn" prefWidth="154.0" text="Transaction Type" />
+                    <TableColumn fx:id="frequencyColumn" prefWidth="91.0" text="Frequency" />
+                    <TableColumn fx:id="dueDateColumn" prefWidth="93.0" text="Due Date" />
                 </columns>
             </TableView>
             <Text fx:id="errorMsg" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="185.13671875">

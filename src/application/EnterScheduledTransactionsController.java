@@ -80,6 +80,7 @@ public class EnterScheduledTransactionsController {
         });
     }
 
+
     @FXML
     private void saveScheduledTransaction() {
         String scheduleName = scheduleNameField.getText();

@@ -47,7 +47,7 @@ public class DataController<T> {
         try {
             File f = new File(filePath);
             if (f.createNewFile()) {
-                createHeaders(filePath, ACCOUNT_HEADERS);
+//                createHeaders(filePath, ACCOUNT_HEADERS);
                 System.out.println("File created at: " + filePath);
             } else {
                 System.out.println("File edited at: " + filePath);
@@ -125,7 +125,7 @@ public class DataController<T> {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             // Skip header line
-            br.readLine();
+//            br.readLine();
 
             String line;
             while ((line = br.readLine()) != null) {
