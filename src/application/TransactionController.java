@@ -84,18 +84,27 @@ public class TransactionController {
             String transactionType = transactionTypeDropdown.getValue();
             LocalDate date = transactionDate.getValue();
             String description = transactionDescription.getText();
-            String payment = paymentAmount.getText();
-            String deposit = depositAmount.getText();
+            String payment = paymentAmount.getText().isEmpty() ? "0.0" : paymentAmount.getText();
+            String deposit = depositAmount.getText().isEmpty() ? "0.0" : depositAmount.getText();
 
-            // Simulate saving the transaction
-            TransactionModel.saveTransaction(account, transactionType, date, description, payment, deposit);
+            // Ensure valid numeric values for payment and deposit amounts
+            try {
+                double paymentAmountValue = Double.parseDouble(payment);
+                double depositAmountValue = Double.parseDouble(deposit);
 
-            showAlert("Transaction saved successfully!", Alert.AlertType.INFORMATION);
-            resetForm();
+                // Simulate saving the transaction
+                TransactionModel.saveTransaction(account, transactionType, date, description, payment, deposit);
+
+                showAlert("Transaction saved successfully!", Alert.AlertType.INFORMATION);
+                resetForm();
+            } catch (NumberFormatException e) {
+                showAlert("Payment Amount and Deposit Amount must be valid numbers.", Alert.AlertType.ERROR);
+            }
         } else {
             showAlert("Please fill all required fields correctly.", Alert.AlertType.ERROR);
         }
     }
+
 
     private boolean validateFields() {
         // Check if all required fields are filled

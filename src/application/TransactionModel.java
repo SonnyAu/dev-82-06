@@ -58,9 +58,14 @@ public class TransactionModel {
         this.depositAmount = depositAmount;
     }
     public static void saveTransaction(String account, String transactionType, LocalDate date, String description, String payment, String deposit) {
-        transactions.add(new String[]{account, transactionType, date.toString(), description, payment, deposit});
-        saveTransactions();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTIONS_FILE, true))) {
+            writer.write(String.join(",", account, transactionType, date.toString(), description, payment, deposit));
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     // getters used in TransactionModel
     public String getAccount() { return account; }
