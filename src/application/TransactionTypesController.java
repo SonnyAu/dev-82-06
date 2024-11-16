@@ -39,23 +39,25 @@ public class TransactionTypesController {
     private void saveTransactionType() {
         String newType = transactionTypeField.getText().trim();
 
-        // Check if the input is empty
         if (newType.isEmpty()) {
             statusLabel.setText("Transaction type cannot be empty.");
             return;
         }
 
-        // Check for duplicate transaction type (case-insensitive)
         if (TransactionModel.isDuplicateTransactionType(newType)) {
-            statusLabel.setText("Transaction type already exists. Please choose a different name.");
+            statusLabel.setText("Transaction type already exists.");
             return;
         }
 
-        // Add the new transaction type if it is not a duplicate
+        if (TransactionModel.getTransactionTypes().size() >= 4) {
+            statusLabel.setText("Cannot add more than 4 transaction types. Please delete an existing one.");
+            return;
+        }
+
+        // Add the new transaction type
         TransactionModel.addTransactionType(newType);
         statusLabel.setText("Transaction type added successfully.");
-
-        // Clear the field after saving
         transactionTypeField.clear();
     }
+
 }
