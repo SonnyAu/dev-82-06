@@ -42,10 +42,68 @@ public class TransactionModel {
         }
     }
 
+    private String account;
+    private String transactionType;
+    private LocalDate transactionDate;
+    private String transactionDescription;
+    private double paymentAmount;
+    private double depositAmount;
+
+    public TransactionModel(String account, String transactionType, LocalDate transactionDate, String transactionDescription, double paymentAmount, double depositAmount) {
+        this.account = account;
+        this.transactionType = transactionType;
+        this.transactionDate = transactionDate;
+        this.transactionDescription = transactionDescription;
+        this.paymentAmount = paymentAmount;
+        this.depositAmount = depositAmount;
+    }
     public static void saveTransaction(String account, String transactionType, LocalDate date, String description, String payment, String deposit) {
         transactions.add(new String[]{account, transactionType, date.toString(), description, payment, deposit});
         saveTransactions();
     }
+
+    // getters used in TransactionModel
+    public String getAccount() { return account; }
+    public String getTransactionType() { return transactionType; }
+    public String getTransactionDescription() { return transactionDescription; }
+    public double getPaymentAmount() { return paymentAmount; }
+    public double getDepositAmount() { return depositAmount; }
+    public LocalDate getTransactionDate() { return transactionDate; }
+
+    // Load scheduled transactions from CSV
+    public static List<TransactionModel> getAllTransactions() {
+        List<TransactionModel> transactionsList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTIONS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] transactionData = line.split(",");
+
+                // Validate line length
+                if (transactionData.length < 6) {
+                    System.err.println("Malformed transaction line: " + line);
+                    continue; // Skip this line
+                }
+
+                try {
+                    transactionsList.add(new TransactionModel(
+                            transactionData[0].trim(), // account
+                            transactionData[1].trim(), // transactionType
+                            LocalDate.parse(transactionData[2].trim()), // transactionDate
+                            transactionData[3].trim(), // transactionDescription
+                            transactionData[4].isEmpty() ? 0.0 : Double.parseDouble(transactionData[4].trim()), // paymentAmount
+                            transactionData[5].isEmpty() ? 0.0 : Double.parseDouble(transactionData[5].trim())  // depositAmount
+                    ));
+                } catch (Exception e) {
+                    System.err.println("Error parsing transaction line: " + line);
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactionsList;
+    }
+
 
     private static void saveTransactionTypes() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTION_TYPES_FILE))) {
@@ -92,4 +150,7 @@ public class TransactionModel {
             e.printStackTrace();
         }
     }
+
+
+
 }

@@ -43,6 +43,14 @@
                </font>
             </Button>
 
+            <Button fx:id="showTransactionsButton" onAction="#showTransactionsButton"
+                    prefHeight="34.0" prefWidth="200.0"
+                    style="-fx-background-color: #808080;" text="Show Transactions" textFill="WHITE">
+               <font>
+                  <Font name="Microsoft Sans Serif" size="15.0" />
+               </font>
+            </Button>
+
             <Button fx:id="enterScheduledTransactionsButton" onAction="#enterScheduledTransactionsButton"
                     prefHeight="34.0" prefWidth="200.0"
                     style="-fx-background-color: #808080;" text="Enter Scheduled Transactions" textFill="WHITE">

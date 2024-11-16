@@ -26,6 +26,11 @@ public class SidebarController {
     }
 
     @FXML
+    public void showTransactionsButton() {
+        loadPage("/resources/showTransactions.fxml");
+    }
+
+    @FXML
     public void enterScheduledTransactionsButton() {
         loadPage("/resources/enterScheduledTransactions.fxml");
     }
