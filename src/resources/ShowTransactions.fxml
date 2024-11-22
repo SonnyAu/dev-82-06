@@ -7,12 +7,18 @@
 
 <AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ShowTransactionController">
     <children>
+        <!-- Home Button -->
         <Button fx:id="setRightPaneAsHome" layoutX="25.0" layoutY="25.0" onAction="#setRightPaneAsHome" prefHeight="30.0" prefWidth="107.0" style="-fx-background-color: #9fa698;" text="Home" textFill="WHITE">
             <font>
                 <Font name="Microsoft Sans Serif" size="15.0" />
             </font>
         </Button>
-        <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="800.0" spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="0.0">
+
+        <!-- Search Bar -->
+        <TextField fx:id="searchBar" layoutX="250.0" layoutY="50.0" prefWidth="700.0" promptText="Search transactions..." />
+
+        <!-- Transactions Table -->
+        <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="800.0" spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="100.0">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
@@ -32,5 +38,12 @@
                 </font>
             </Text>
         </VBox>
+
+        <!-- Edit Button -->
+        <Button fx:id="editButton" layoutX="550.0" layoutY="750.0" onAction="#openEditPane" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #9fa698;" text="Edit Transaction" textFill="WHITE">
+            <font>
+                <Font name="Microsoft Sans Serif" size="15.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>

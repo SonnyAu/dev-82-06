@@ -6,41 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionModel {
-    private static List<String> transactionTypes = new ArrayList<>();
-    private static List<String[]> transactions = new ArrayList<>();
-    private static final String TRANSACTION_TYPES_FILE = "src/data/transaction_types.csv";
     private static final String TRANSACTIONS_FILE = "src/data/transactions.csv";
-
-    // Static initializer block to pre-populate transaction types
-    static {
-        transactionTypes.add("Groceries");
-        transactionTypes.add("Utilities");
-        transactionTypes.add("Rent");
-        transactionTypes.add("Entertainment");
-
-        loadTransactions();
-    }
-
-    public static List<String> getTransactionTypes() {
-        return new ArrayList<>(transactionTypes);
-    }
-
-    public static boolean isDuplicateTransactionType(String type) {
-        String lowerType = type.toLowerCase();
-        for (String existingType : transactionTypes) {
-            if (existingType.toLowerCase().equals(lowerType)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void addTransactionType(String type) {
-        if (!isDuplicateTransactionType(type)) {
-            transactionTypes.add(type.trim());
-            saveTransactionTypes();
-        }
-    }
+    private static final String TRANSACTION_TYPES_FILE = "src/data/transaction_types.csv";
+    private static List<TransactionModel> transactionsList = new ArrayList<>();
+    private static List<String> transactionTypes = new ArrayList<>();
 
     private String account;
     private String transactionType;
@@ -49,6 +18,7 @@ public class TransactionModel {
     private double paymentAmount;
     private double depositAmount;
 
+    // Constructor
     public TransactionModel(String account, String transactionType, LocalDate transactionDate, String transactionDescription, double paymentAmount, double depositAmount) {
         this.account = account;
         this.transactionType = transactionType;
@@ -58,11 +28,97 @@ public class TransactionModel {
         this.depositAmount = depositAmount;
     }
 
-    public static void saveTransaction(String account, String transactionType, LocalDate date, String description, double payment, double deposit) {
+    // Getters
+    public String getAccount() {
+        return account;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public String getTransactionDescription() {
+        return transactionDescription;
+    }
+
+    public double getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public double getDepositAmount() {
+        return depositAmount;
+    }
+
+    // Setters
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public void setTransactionDescription(String transactionDescription) {
+        this.transactionDescription = transactionDescription;
+    }
+
+    public void setPaymentAmount(double paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+    public void setDepositAmount(double depositAmount) {
+        this.depositAmount = depositAmount;
+    }
+
+    // Method to check for duplicate transaction types
+    public static boolean isDuplicateTransactionType(String type) {
+        for (String existingType : transactionTypes) {
+            if (existingType.equalsIgnoreCase(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Method to add a transaction type
+    public static void addTransactionType(String type) {
+        if (!isDuplicateTransactionType(type)) {
+            transactionTypes.add(type.trim());
+            saveTransactionTypes();
+        }
+    }
+
+    // Get Transaction Types
+    public static List<String> getTransactionTypes() {
+        return new ArrayList<>(transactionTypes);
+    }
+
+    // Save Transaction Types to File
+    private static void saveTransactionTypes() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTION_TYPES_FILE))) {
+            for (String type : transactionTypes) {
+                writer.write(type);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Save Transaction
+    public static void saveTransaction(String account, String transactionType, LocalDate date, String description, double paymentAmount, double depositAmount) {
         try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTIONS_FILE));
              BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTIONS_FILE, true))) {
 
-            // Check for duplicates directly in the file
+            // Check for duplicates in the file
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] transactionData = line.split(",");
@@ -72,22 +128,24 @@ public class TransactionModel {
                         transactionData[2].equals(date.toString()) &&
                         transactionData[3].equals(description)) {
                     System.out.println("Duplicate transaction found. Not saving: " + description);
-                    return; // Duplicate found, exit
+                    return; // Stop saving if duplicate is found
                 }
             }
 
-            // Write the transaction if it's unique
+            // Append the new transaction if it's unique
             String transactionLine = String.join(",",
                     account,
                     transactionType,
                     date.toString(),
                     description,
-                    String.valueOf(payment),
-                    String.valueOf(deposit)
+                    String.valueOf(paymentAmount),
+                    String.valueOf(depositAmount)
             );
             writer.write(transactionLine);
             writer.newLine();
+            System.out.println("Transaction saved successfully!");
         } catch (IOException e) {
+            System.err.println("Error saving transaction: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -109,38 +167,31 @@ public class TransactionModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        getAllTransactions(); // Refresh the transactionsList
     }
 
-    // Getters used in TransactionModel
-    public String getAccount() { return account; }
-    public String getTransactionType() { return transactionType; }
-    public String getTransactionDescription() { return transactionDescription; }
-    public double getPaymentAmount() { return paymentAmount; }
-    public double getDepositAmount() { return depositAmount; }
-    public LocalDate getTransactionDate() { return transactionDate; }
 
-    // Load all transactions from CSV
+    // Load All Transactions
     public static List<TransactionModel> getAllTransactions() {
-        List<TransactionModel> transactionsList = new ArrayList<>();
+        transactionsList.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTIONS_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] transactionData = line.split(",");
 
-                // Validate line length
                 if (transactionData.length < 6) {
                     System.err.println("Malformed transaction line: " + line);
-                    continue; // Skip this line
+                    continue;
                 }
 
                 try {
                     transactionsList.add(new TransactionModel(
-                            transactionData[0].trim(), // account
-                            transactionData[1].trim(), // transactionType
-                            LocalDate.parse(transactionData[2].trim()), // transactionDate
-                            transactionData[3].trim(), // transactionDescription
-                            transactionData[4].isEmpty() ? 0.0 : Double.parseDouble(transactionData[4].trim()), // paymentAmount
-                            transactionData[5].isEmpty() ? 0.0 : Double.parseDouble(transactionData[5].trim())  // depositAmount
+                            transactionData[0].trim(),
+                            transactionData[1].trim(),
+                            LocalDate.parse(transactionData[2].trim()),
+                            transactionData[3].trim(),
+                            transactionData[4].isEmpty() ? 0.0 : Double.parseDouble(transactionData[4].trim()),
+                            transactionData[5].isEmpty() ? 0.0 : Double.parseDouble(transactionData[5].trim())
                     ));
                 } catch (Exception e) {
                     System.err.println("Error parsing transaction line: " + line);
@@ -150,30 +201,6 @@ public class TransactionModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return transactionsList;
-    }
-
-
-    private static void saveTransactionTypes() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTION_TYPES_FILE))) {
-            for (String type : transactionTypes) {
-                writer.write(type);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void loadTransactions() {
-        transactions.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTIONS_FILE))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                transactions.add(line.split(","));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return new ArrayList<>(transactionsList);
     }
 }

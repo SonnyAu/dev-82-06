@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.EditTransactionController" prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <VBox alignment="CENTER" spacing="10.0" layoutX="50.0" layoutY="50.0" prefHeight="300.0" prefWidth="500.0">
+            <Label text="Edit Transaction" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10.0">
+                <Label text="Account:" />
+                <ComboBox fx:id="accountDropdown" prefWidth="200.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Transaction Type:" />
+                <ComboBox fx:id="transactionTypeDropdown" prefWidth="200.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Transaction Date:" />
+                <DatePicker fx:id="transactionDate" prefWidth="200.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Description:" />
+                <TextField fx:id="transactionDescription" prefWidth="300.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Payment Amount:" />
+                <TextField fx:id="paymentAmount" prefWidth="100.0" />
+                <Label text="Deposit Amount:" />
+                <TextField fx:id="depositAmount" prefWidth="100.0" />
+            </HBox>
+
+            <HBox spacing="10.0" alignment="CENTER">
+                <Button fx:id="saveButton" text="Save" prefWidth="100.0" />
+                <Button fx:id="cancelButton" text="Cancel" prefWidth="100.0" />
+            </HBox>
+        </VBox>
+    </children>
+</AnchorPane>
