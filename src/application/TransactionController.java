@@ -34,31 +34,29 @@ public class TransactionController {
 
     @FXML
     public void initialize() {
-        // Clear any existing items to prevent duplicates
+        // Populate dropdowns with data
         accountDropdown.getItems().clear();
-        transactionTypeDropdown.getItems().clear();
-
-        // Populate accountDropdown and transactionTypeDropdown with unique data
         accountDropdown.getItems().addAll(AccountModel.getAccountNames());
         accountDropdown.getSelectionModel().selectFirst(); // Default selection
 
+        transactionTypeDropdown.getItems().clear();
         transactionTypeDropdown.getItems().addAll(TransactionModel.getTransactionTypes());
         transactionTypeDropdown.getSelectionModel().selectFirst(); // Default selection
 
         transactionDate.setValue(LocalDate.now()); // Default date
 
-        // Set save button action
-        saveButton.setOnAction(e -> saveTransaction());
-
-        // Add listeners to restrict input to numeric values (double) for paymentAmount and depositAmount
+        // Restrict input to valid numeric values for payment and deposit
         restrictToDoubleInput(paymentAmount);
         restrictToDoubleInput(depositAmount);
+
+        // Save button action
+        saveButton.setOnAction(e -> saveTransaction());
     }
 
     private void restrictToDoubleInput(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                textField.setText(oldValue); // Revert to old value if input is not valid
+                textField.setText(oldValue); // Revert to old value if input is invalid
             }
         });
     }
@@ -80,78 +78,46 @@ public class TransactionController {
     @FXML
     private void saveTransaction() {
         if (validateFields()) {
-            String account = accountDropdown.getValue();
-            String transactionType = transactionTypeDropdown.getValue();
-            LocalDate date = transactionDate.getValue();
-            String description = transactionDescription.getText();
-            String payment = paymentAmount.getText().isEmpty() ? "0.0" : paymentAmount.getText();
-            String deposit = depositAmount.getText().isEmpty() ? "0.0" : depositAmount.getText();
-
-            // Ensure valid numeric values for payment and deposit amounts
             try {
-                double paymentAmountValue = Double.parseDouble(payment);
-                double depositAmountValue = Double.parseDouble(deposit);
+                String account = accountDropdown.getValue();
+                String transactionType = transactionTypeDropdown.getValue();
+                LocalDate date = transactionDate.getValue();
+                String description = transactionDescription.getText();
+                double payment = paymentAmount.getText().isEmpty() ? 0.0 : Double.parseDouble(paymentAmount.getText());
+                double deposit = depositAmount.getText().isEmpty() ? 0.0 : Double.parseDouble(depositAmount.getText());
 
-                // Simulate saving the transaction
+                // Save the transaction
                 TransactionModel.saveTransaction(account, transactionType, date, description, payment, deposit);
 
                 showAlert("Transaction saved successfully!", Alert.AlertType.INFORMATION);
                 resetForm();
             } catch (NumberFormatException e) {
-                showAlert("Payment Amount and Deposit Amount must be valid numbers.", Alert.AlertType.ERROR);
+                showAlert("Invalid numeric values for Payment Amount or Deposit Amount.", Alert.AlertType.ERROR);
             }
-        } else {
-            showAlert("Please fill all required fields correctly.", Alert.AlertType.ERROR);
         }
     }
-
 
     private boolean validateFields() {
         // Check if all required fields are filled
         if (accountDropdown.getValue() == null || transactionTypeDropdown.getValue() == null ||
-                transactionTypeDropdown.getValue().isEmpty() || transactionDate.getValue() == null ||
-                transactionDescription.getText().isEmpty()) {
-            showAlert("Please fill all required fields correctly.", Alert.AlertType.ERROR);
+                transactionDate.getValue() == null || transactionDescription.getText().isEmpty()) {
+            showAlert("Please fill all required fields.", Alert.AlertType.ERROR);
             return false;
         }
 
-        // Check if both Payment Amount and Deposit Amount are empty
+        // Validate at least one of Payment or Deposit is filled
         if (paymentAmount.getText().isEmpty() && depositAmount.getText().isEmpty()) {
             showAlert("Please enter either a Payment Amount or a Deposit Amount.", Alert.AlertType.ERROR);
             return false;
         }
 
-        // Check if both Payment Amount and Deposit Amount are filled
+        // Validate both Payment and Deposit are not filled simultaneously
         if (!paymentAmount.getText().isEmpty() && !depositAmount.getText().isEmpty()) {
             showAlert("Please fill either Payment Amount or Deposit Amount, not both.", Alert.AlertType.ERROR);
             return false;
         }
 
-        // Validate numeric input for Payment Amount
-        if (!paymentAmount.getText().isEmpty() && !isNumeric(paymentAmount.getText())) {
-            showAlert("Payment Amount must be a number.", Alert.AlertType.ERROR);
-            return false;
-        }
-
-        // Validate numeric input for Deposit Amount
-        if (!depositAmount.getText().isEmpty() && !isNumeric(depositAmount.getText())) {
-            showAlert("Deposit Amount must be a number.", Alert.AlertType.ERROR);
-            return false;
-        }
-
         return true;
-    }
-
-    private boolean isNumeric(String str) {
-        if (str == null || str.isEmpty()) {
-            return false;
-        }
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     private void resetForm() {

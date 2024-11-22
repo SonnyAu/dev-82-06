@@ -12,7 +12,7 @@ public class ScheduledTransactionModel {
     private String account;
     private String transactionType;
     private String frequency;
-    private int dueDate;
+    private int dueDate; // e.g., day of the month
     private double paymentAmount;
 
     public ScheduledTransactionModel(String scheduleName, String account, String transactionType, String frequency, int dueDate, double paymentAmount) {
@@ -39,14 +39,26 @@ public class ScheduledTransactionModel {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                transactions.add(new ScheduledTransactionModel(
-                        data[0],
-                        data[1],
-                        data[2],
-                        data[3],
-                        Integer.parseInt(data[4]),
-                        Double.parseDouble(data[5])
-                ));
+
+                // Validate data length
+                if (data.length < 6) {
+                    System.err.println("Malformed scheduled transaction line: " + line);
+                    continue; // Skip malformed rows
+                }
+
+                try {
+                    transactions.add(new ScheduledTransactionModel(
+                            data[0].trim(), // scheduleName
+                            data[1].trim(), // account
+                            data[2].trim(), // transactionType
+                            data[3].trim(), // frequency
+                            Integer.parseInt(data[4].trim()), // dueDate
+                            Double.parseDouble(data[5].trim()) // paymentAmount
+                    ));
+                } catch (NumberFormatException e) {
+                    System.err.println("Error parsing scheduled transaction data: " + line);
+                    e.printStackTrace();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,9 +68,17 @@ public class ScheduledTransactionModel {
 
     // Save a scheduled transaction to CSV
     public static void saveScheduledTransaction(String scheduleName, String account, String transactionType, String frequency, String dueDate, String paymentAmount) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE, true))) {
-            writer.write(scheduleName + "," + account + "," + transactionType + "," + frequency + "," + dueDate + "," + paymentAmount);
-            writer.newLine();
+        try {
+            // Prevent duplicate entries
+            if (isDuplicateScheduleName(scheduleName)) {
+                System.out.println("Duplicate scheduled transaction. Not saving: " + scheduleName);
+                return;
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE, true))) {
+                writer.write(scheduleName + "," + account + "," + transactionType + "," + frequency + "," + dueDate + "," + paymentAmount);
+                writer.newLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,5 +93,23 @@ public class ScheduledTransactionModel {
             }
         }
         return false;
+    }
+
+    // Populate the file with 10 default scheduled transactions
+    public static void populateDefaultScheduledTransactions() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE))) {
+            writer.write("Netflix Subscription,Savings,Entertainment,Monthly,15,15.0\n");
+            writer.write("Gym Membership,Savings,Utilities,Monthly,1,50.0\n");
+            writer.write("Office Rent,Business,Rent,Monthly,5,1000.0\n");
+            writer.write("Weekly Groceries,Checking,Groceries,Weekly,7,80.0\n");
+            writer.write("Electricity Bill,Savings,Utilities,Monthly,20,50.0\n");
+            writer.write("Water Bill,Savings,Utilities,Monthly,25,30.0\n");
+            writer.write("Internet Bill,Savings,Utilities,Monthly,10,60.0\n");
+            writer.write("Insurance Premium,Savings,Utilities,Monthly,1,100.0\n");
+            writer.write("Client Meeting,Business,Entertainment,Quarterly,1,300.0\n");
+            writer.write("Yearly Subscription,Savings,Entertainment,Yearly,1,120.0\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
