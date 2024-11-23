@@ -5,43 +5,51 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditScheduledTransactionController">
+<AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditScheduledTransactionController">
     <children>
-        <VBox alignment="CENTER" layoutX="100.0" layoutY="50.0" spacing="20" AnchorPane.bottomAnchor="50.0" AnchorPane.topAnchor="50.0">
+        <!-- Form Container -->
+        <VBox alignment="CENTER" layoutX="200.0" prefHeight="600.0" prefWidth="800.0" spacing="20" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" AnchorPane.topAnchor="100.0">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <Label text="Edit Scheduled Transaction" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+            <!-- Title -->
+            <Label text="Edit Scheduled Transaction" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" />
 
-            <HBox spacing="10.0">
-                <Label text="Account:" />
+            <!-- Account Dropdown -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Account:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
                 <ComboBox fx:id="accountDropdown" prefWidth="300.0" />
             </HBox>
 
-            <HBox spacing="10.0">
-                <Label text="Transaction Type:" />
+            <!-- Transaction Type Dropdown -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Transaction Type:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
                 <ComboBox fx:id="transactionTypeDropdown" prefWidth="300.0" />
             </HBox>
 
-            <HBox spacing="10.0">
-                <Label text="Frequency:" />
+            <!-- Frequency Dropdown -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Frequency:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
                 <ComboBox fx:id="frequencyDropdown" prefWidth="300.0" />
             </HBox>
 
-            <HBox spacing="10.0">
-                <Label text="Due Date:" />
-                <TextField fx:id="dueDateField" promptText="Enter day of the month" />
+            <!-- Due Date Field -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Due Date:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+                <TextField fx:id="dueDateField" promptText="Enter day of the month" prefWidth="300.0" />
             </HBox>
 
-            <HBox spacing="10.0">
-                <Label text="Payment Amount:" />
-                <TextField fx:id="paymentAmountField" />
+            <!-- Payment Amount Field -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Payment Amount:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+                <TextField fx:id="paymentAmountField" prefWidth="300.0" />
             </HBox>
 
-            <HBox spacing="20.0">
-                <Button fx:id="saveButton" text="Save" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
-                <Button fx:id="cancelButton" text="Cancel" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
+            <!-- Buttons -->
+            <HBox spacing="20.0" alignment="CENTER">
+                <Button fx:id="saveButton" text="Save" prefWidth="120.0" prefHeight="30.0" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
+                <Button fx:id="cancelButton" text="Cancel" prefWidth="120.0" prefHeight="30.0" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
             </HBox>
         </VBox>
     </children>

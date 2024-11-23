@@ -33,5 +33,12 @@
                 </columns>
             </TableView>
         </VBox>
+
+        <!-- Edit Button -->
+        <Button fx:id="editButton" layoutX="550.0" layoutY="750.0" onAction="#openEditPane" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #9fa698;" text="Edit Transaction" textFill="WHITE">
+            <font>
+                <Font name="Microsoft Sans Serif" size="15.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>

@@ -51,16 +51,16 @@ public class ShowScheduledTransactionsController {
         // Add a listener to the search bar for filtering
         searchBar.textProperty().addListener((observable, oldValue, newValue) -> searchScheduledTransactions(newValue));
 
-        // Enable row click functionality to edit transactions
-        scheduledTransactionTable.setRowFactory(tv -> {
-            TableRow<ScheduledTransactionModel> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    openEditPane(row.getItem());
-                }
-            });
-            return row;
-        });
+//        // Enable row click functionality to edit transactions
+//        scheduledTransactionTable.setRowFactory(tv -> {
+//            TableRow<ScheduledTransactionModel> row = new TableRow<>();
+//            row.setOnMouseClicked(event -> {
+//                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+//                    openEditPane(row.getItem());
+//                }
+//            });
+//            return row;
+//        });
     }
 
     private void loadAndDisplayScheduledTransactions() {
@@ -80,21 +80,38 @@ public class ShowScheduledTransactionsController {
         scheduledTransactionTable.setItems(filteredTransactions);
     }
 
-    private void openEditPane(ScheduledTransactionModel transaction) {
+    private void showAlert(String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void openEditPane() {
         try {
+            // Get the selected item from the table
+            ScheduledTransactionModel selectedTransaction = scheduledTransactionTable.getSelectionModel().getSelectedItem();
+            if (selectedTransaction == null) {
+                showAlert("No scheduled transaction selected for editing.", Alert.AlertType.WARNING);
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/editScheduledTransaction.fxml"));
             AnchorPane editPane = loader.load();
 
             // Pass the selected transaction to the edit controller
             EditScheduledTransactionController controller = loader.getController();
-            controller.setTransaction(transaction);
+            controller.setTransaction(selectedTransaction);
 
-            // Replace the current view with the edit pane
+            // Replace the right pane with the edit view
             HBox root = RootController.getInstance().getContainer();
-            root.getChildren().remove(root.getChildren().size() - 1);
+            if (!root.getChildren().isEmpty()) {
+                root.getChildren().remove(root.getChildren().size() - 1);
+            }
             root.getChildren().add(editPane);
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Failed to open the edit pane.", Alert.AlertType.ERROR);
         }
     }
 
