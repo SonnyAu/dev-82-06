@@ -2,10 +2,9 @@ package application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.HBox;
-
-import java.time.LocalDate;
+import javafx.scene.layout.AnchorPane;
 
 public class EditTransactionController {
 
@@ -62,7 +61,6 @@ public class EditTransactionController {
         });
     }
 
-
     // Set the transaction to be edited
     public void setTransaction(TransactionModel transaction) {
         if (transaction != null) {
@@ -71,8 +69,10 @@ public class EditTransactionController {
             transactionTypeDropdown.setValue(transaction.getTransactionType());
             transactionDate.setValue(transaction.getTransactionDate());
             transactionDescription.setText(transaction.getTransactionDescription());
-            paymentAmount.setText(String.valueOf(transaction.getPaymentAmount()));
-            depositAmount.setText(String.valueOf(transaction.getDepositAmount()));
+
+            // For paymentAmount and depositAmount, set default value as 0.0 if they are not populated
+            paymentAmount.setText(transaction.getPaymentAmount() != 0.0 ? String.valueOf(transaction.getPaymentAmount()) : "");
+            depositAmount.setText(transaction.getDepositAmount() != 0.0 ? String.valueOf(transaction.getDepositAmount()) : "");
         }
     }
 
@@ -89,24 +89,20 @@ public class EditTransactionController {
             currentTransaction.setTransactionType(transactionTypeDropdown.getValue());
             currentTransaction.setTransactionDate(transactionDate.getValue());
             currentTransaction.setTransactionDescription(transactionDescription.getText());
-            currentTransaction.setPaymentAmount(Double.parseDouble(paymentAmount.getText()));
-            currentTransaction.setDepositAmount(Double.parseDouble(depositAmount.getText()));
 
-            // Save to file
-            TransactionModel.saveTransaction(
-                    currentTransaction.getAccount(),
-                    currentTransaction.getTransactionType(),
-                    currentTransaction.getTransactionDate(),
-                    currentTransaction.getTransactionDescription(),
-                    currentTransaction.getPaymentAmount(),
-                    currentTransaction.getDepositAmount()
-            );
+            String paymentText = paymentAmount.getText().trim();
+            String depositText = depositAmount.getText().trim();
+
+            currentTransaction.setPaymentAmount(paymentText.isEmpty() ? 0.0 : Double.parseDouble(paymentText));
+            currentTransaction.setDepositAmount(depositText.isEmpty() ? 0.0 : Double.parseDouble(depositText));
+
+            // Save updates to data source
+            TransactionModel.updateTransaction(currentTransaction);
 
             showAlert("Transaction updated successfully!", Alert.AlertType.INFORMATION);
             closeEditPane();
         }
     }
-
 
     // Validate input fields
     private boolean validateFields() {
@@ -115,8 +111,19 @@ public class EditTransactionController {
             showAlert("All fields must be filled!", Alert.AlertType.ERROR);
             return false;
         }
-        if (paymentAmount.getText().isEmpty() && depositAmount.getText().isEmpty()) {
+        if (paymentAmount.getText().trim().isEmpty() && depositAmount.getText().trim().isEmpty()) {
             showAlert("Please enter either a Payment Amount or a Deposit Amount.", Alert.AlertType.ERROR);
+            return false;
+        }
+        try {
+            if (!paymentAmount.getText().trim().isEmpty()) {
+                Double.parseDouble(paymentAmount.getText());
+            }
+            if (!depositAmount.getText().trim().isEmpty()) {
+                Double.parseDouble(depositAmount.getText());
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Amounts must be valid numbers.", Alert.AlertType.ERROR);
             return false;
         }
         return true;
@@ -124,22 +131,24 @@ public class EditTransactionController {
 
     // Close the edit pane
     private void closeEditPane() {
-        if (saveButton.getScene() == null || saveButton.getScene().getRoot() == null) {
-            showAlert("Unable to close the edit pane. No root detected.", Alert.AlertType.ERROR);
-            return;
-        }
+        try {
+            // Access the parent container of the current pane
+            Pane parent = (Pane) saveButton.getScene().getRoot();
 
-        if (saveButton.getScene().getRoot() instanceof AnchorPane) {
-            AnchorPane parent = (AnchorPane) saveButton.getScene().getRoot();
-            parent.getChildren().clear(); // Removes the edit pane
-        } else if (saveButton.getScene().getRoot() instanceof HBox) {
-            HBox parent = (HBox) saveButton.getScene().getRoot();
-            parent.getChildren().remove(this.saveButton.getParent()); // Removes the edit pane from HBox
-        } else {
-            System.err.println("Root layout is not AnchorPane or HBox. Cannot close the edit pane.");
+            if (parent instanceof HBox) {
+                // If the root layout is HBox, remove the edit pane
+                ((HBox) parent).getChildren().remove(this.saveButton.getParent());
+            } else if (parent instanceof AnchorPane) {
+                // If the root layout is AnchorPane, clear the children
+                ((AnchorPane) parent).getChildren().clear();
+            } else {
+                System.err.println("Unsupported layout type for root: " + parent.getClass().getName());
+            }
+        } catch (Exception e) {
+            showAlert("Failed to close the edit pane. Ensure the layout is properly set up.", Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
-
 
     // Show alert dialog
     private void showAlert(String message, Alert.AlertType type) {

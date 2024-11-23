@@ -12,7 +12,7 @@ public class ScheduledTransactionModel {
     private String account;
     private String transactionType;
     private String frequency;
-    private int dueDate; // e.g., day of the month
+    private int dueDate;
     private double paymentAmount;
 
     public ScheduledTransactionModel(String scheduleName, String account, String transactionType, String frequency, int dueDate, double paymentAmount) {
@@ -24,7 +24,6 @@ public class ScheduledTransactionModel {
         this.paymentAmount = paymentAmount;
     }
 
-    // Getters for TableView (used in ShowScheduledTransactionsController)
     public String getScheduleName() { return scheduleName; }
     public String getAccount() { return account; }
     public String getTransactionType() { return transactionType; }
@@ -32,28 +31,33 @@ public class ScheduledTransactionModel {
     public int getDueDate() { return dueDate; }
     public double getPaymentAmount() { return paymentAmount; }
 
-    // Load scheduled transactions from CSV
+    public void setScheduleName(String scheduleName) { this.scheduleName = scheduleName; }
+    public void setAccount(String account) { this.account = account; }
+    public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
+    public void setFrequency(String frequency) { this.frequency = frequency; }
+    public void setDueDate(int dueDate) { this.dueDate = dueDate; }
+    public void setPaymentAmount(double paymentAmount) { this.paymentAmount = paymentAmount; }
+
+    // Load all scheduled transactions
     public static List<ScheduledTransactionModel> getScheduledTransactions() {
         List<ScheduledTransactionModel> transactions = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(SCHEDULED_TRANSACTIONS_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-
-                // Validate data length
                 if (data.length < 6) {
                     System.err.println("Malformed scheduled transaction line: " + line);
-                    continue; // Skip malformed rows
+                    continue;
                 }
 
                 try {
                     transactions.add(new ScheduledTransactionModel(
-                            data[0].trim(), // scheduleName
-                            data[1].trim(), // account
-                            data[2].trim(), // transactionType
-                            data[3].trim(), // frequency
-                            Integer.parseInt(data[4].trim()), // dueDate
-                            Double.parseDouble(data[5].trim()) // paymentAmount
+                            data[0].trim(),
+                            data[1].trim(),
+                            data[2].trim(),
+                            data[3].trim(),
+                            Integer.parseInt(data[4].trim()),
+                            Double.parseDouble(data[5].trim())
                     ));
                 } catch (NumberFormatException e) {
                     System.err.println("Error parsing scheduled transaction data: " + line);
@@ -66,17 +70,58 @@ public class ScheduledTransactionModel {
         return transactions;
     }
 
-    // Save a scheduled transaction to CSV
+    // Save a new scheduled transaction
     public static void saveScheduledTransaction(String scheduleName, String account, String transactionType, String frequency, String dueDate, String paymentAmount) {
-        try {
-            // Prevent duplicate entries
-            if (isDuplicateScheduleName(scheduleName)) {
-                System.out.println("Duplicate scheduled transaction. Not saving: " + scheduleName);
-                return;
-            }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE, true))) {
+            writer.write(String.join(",",
+                    scheduleName,
+                    account,
+                    transactionType,
+                    frequency,
+                    dueDate,
+                    paymentAmount
+            ));
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE, true))) {
-                writer.write(scheduleName + "," + account + "," + transactionType + "," + frequency + "," + dueDate + "," + paymentAmount);
+    // Save a new scheduled transaction using the model object
+    public static void saveScheduledTransaction(ScheduledTransactionModel transaction) {
+        saveScheduledTransaction(
+                transaction.getScheduleName(),
+                transaction.getAccount(),
+                transaction.getTransactionType(),
+                transaction.getFrequency(),
+                String.valueOf(transaction.getDueDate()),
+                String.valueOf(transaction.getPaymentAmount())
+        );
+    }
+
+    public static void updateScheduledTransaction(ScheduledTransactionModel updatedTransaction, String oldScheduleName) {
+        List<ScheduledTransactionModel> transactions = getScheduledTransactions();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE))) {
+            for (ScheduledTransactionModel transaction : transactions) {
+                if (transaction.getScheduleName().equalsIgnoreCase(oldScheduleName)) {
+                    writer.write(String.join(",",
+                            updatedTransaction.getScheduleName(),
+                            updatedTransaction.getAccount(),
+                            updatedTransaction.getTransactionType(),
+                            updatedTransaction.getFrequency(),
+                            String.valueOf(updatedTransaction.getDueDate()),
+                            String.valueOf(updatedTransaction.getPaymentAmount())
+                    ));
+                } else {
+                    writer.write(String.join(",",
+                            transaction.getScheduleName(),
+                            transaction.getAccount(),
+                            transaction.getTransactionType(),
+                            transaction.getFrequency(),
+                            String.valueOf(transaction.getDueDate()),
+                            String.valueOf(transaction.getPaymentAmount())
+                    ));
+                }
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -84,41 +129,14 @@ public class ScheduledTransactionModel {
         }
     }
 
-    // Check for duplicate schedule names
+
+
+
+    // Prevent duplicate schedule names
     public static boolean isDuplicateScheduleName(String scheduleName) {
         List<ScheduledTransactionModel> transactions = getScheduledTransactions();
-        for (ScheduledTransactionModel transaction : transactions) {
-            if (transaction.getScheduleName().equalsIgnoreCase(scheduleName)) {
-                return true;
-            }
-        }
-        return false;
+        return transactions.stream().anyMatch(t -> t.getScheduleName().equalsIgnoreCase(scheduleName));
     }
-
-    public void setScheduleName(String scheduleName) {
-        this.scheduleName = scheduleName;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-
-    public void setDueDate(int dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public void setPaymentAmount(double paymentAmount) {
-        this.paymentAmount = paymentAmount;
-    }
-
 
     // Populate the file with 10 default scheduled transactions
     public static void populateDefaultScheduledTransactions() {

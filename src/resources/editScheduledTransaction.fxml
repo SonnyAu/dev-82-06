@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditScheduledTransactionController">
     <children>
@@ -15,6 +14,12 @@
 
             <!-- Title -->
             <Label text="Edit Scheduled Transaction" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" />
+
+            <!-- Schedule Name Field -->
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <Label text="Schedule Name:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+                <TextField fx:id="scheduleNameField" promptText="Enter schedule name" prefWidth="300.0" />
+            </HBox>
 
             <!-- Account Dropdown -->
             <HBox spacing="10.0" alignment="CENTER_LEFT">

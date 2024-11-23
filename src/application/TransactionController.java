@@ -86,8 +86,18 @@ public class TransactionController {
                 double payment = paymentAmount.getText().isEmpty() ? 0.0 : Double.parseDouble(paymentAmount.getText());
                 double deposit = depositAmount.getText().isEmpty() ? 0.0 : Double.parseDouble(depositAmount.getText());
 
+                // Create a TransactionModel object
+                TransactionModel newTransaction = new TransactionModel(
+                        account,
+                        transactionType,
+                        date,
+                        description,
+                        payment,
+                        deposit
+                );
+
                 // Save the transaction
-                TransactionModel.saveTransaction(account, transactionType, date, description, payment, deposit);
+                TransactionModel.saveTransaction(newTransaction);
 
                 showAlert("Transaction saved successfully!", Alert.AlertType.INFORMATION);
                 resetForm();

@@ -3,9 +3,11 @@ package application;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 
 public class EditScheduledTransactionController {
+
+    @FXML
+    private TextField scheduleNameField;
 
     @FXML
     private ComboBox<String> accountDropdown;
@@ -49,6 +51,9 @@ public class EditScheduledTransactionController {
     public void setTransaction(ScheduledTransactionModel transaction) {
         if (transaction != null) {
             currentTransaction = transaction;
+
+            // Bind all fields with the current transaction
+            scheduleNameField.setText(transaction.getScheduleName());
             accountDropdown.setValue(transaction.getAccount());
             transactionTypeDropdown.setValue(transaction.getTransactionType());
             frequencyDropdown.setValue(transaction.getFrequency());
@@ -59,22 +64,18 @@ public class EditScheduledTransactionController {
 
     private void saveTransaction() {
         if (validateFields()) {
-            // Update the transaction
+            String oldScheduleName = currentTransaction.getScheduleName(); // Save old name for matching
+            String newScheduleName = scheduleNameField.getText();
+
+            currentTransaction.setScheduleName(newScheduleName);
             currentTransaction.setAccount(accountDropdown.getValue());
             currentTransaction.setTransactionType(transactionTypeDropdown.getValue());
             currentTransaction.setFrequency(frequencyDropdown.getValue());
             currentTransaction.setDueDate(Integer.parseInt(dueDateField.getText()));
             currentTransaction.setPaymentAmount(Double.parseDouble(paymentAmountField.getText()));
 
-            // Save the updated transaction
-            ScheduledTransactionModel.saveScheduledTransaction(
-                    currentTransaction.getScheduleName(),
-                    currentTransaction.getAccount(),
-                    currentTransaction.getTransactionType(),
-                    currentTransaction.getFrequency(),
-                    String.valueOf(currentTransaction.getDueDate()),
-                    String.valueOf(currentTransaction.getPaymentAmount())
-            );
+            // Save or update the transaction
+            ScheduledTransactionModel.updateScheduledTransaction(currentTransaction, oldScheduleName);
 
             showAlert("Scheduled transaction updated successfully!", Alert.AlertType.INFORMATION);
             closeEditPane();
@@ -82,8 +83,12 @@ public class EditScheduledTransactionController {
     }
 
     private boolean validateFields() {
-        if (accountDropdown.getValue() == null || transactionTypeDropdown.getValue() == null ||
-                frequencyDropdown.getValue() == null || dueDateField.getText().isEmpty() || paymentAmountField.getText().isEmpty()) {
+        if (scheduleNameField.getText().isEmpty() ||
+                accountDropdown.getValue() == null ||
+                transactionTypeDropdown.getValue() == null ||
+                frequencyDropdown.getValue() == null ||
+                dueDateField.getText().isEmpty() ||
+                paymentAmountField.getText().isEmpty()) {
             showAlert("All fields must be filled correctly!", Alert.AlertType.ERROR);
             return false;
         }
@@ -98,12 +103,12 @@ public class EditScheduledTransactionController {
     }
 
     private void closeEditPane() {
-        if (saveButton.getScene().getRoot() instanceof AnchorPane) {
+        try {
             AnchorPane parent = (AnchorPane) saveButton.getScene().getRoot();
-            parent.getChildren().clear();
-        } else if (saveButton.getScene().getRoot() instanceof HBox) {
-            HBox parent = (HBox) saveButton.getScene().getRoot();
-            parent.getChildren().remove(saveButton.getParent());
+            parent.getChildren().clear(); // Close the edit pane
+        } catch (Exception e) {
+            showAlert("Failed to close the edit pane.", Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 
