@@ -4,12 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 
@@ -32,21 +33,11 @@ public class ShowScheduledTransactionsController {
     private TableColumn<ScheduledTransactionModel, Double> paymentAmountColumn;
 
     @FXML
-    public void setRightPaneAsHome() {
-        URL dir = getClass().getResource("/resources/init.fxml");
-        try {
-            HBox root = RootController.getInstance().getContainer();
-            root.getChildren().remove(root.getChildren().size() - 1);
-
-            AnchorPane newAccountPane = FXMLLoader.load(dir);
-            root.getChildren().add(newAccountPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private TextField searchBar;
 
     @FXML
     public void initialize() {
+        // Set up columns with ScheduledTransactionModel fields
         scheduleNameColumn.setCellValueFactory(new PropertyValueFactory<>("scheduleName"));
         accountColumn.setCellValueFactory(new PropertyValueFactory<>("account"));
         transactionTypeColumn.setCellValueFactory(new PropertyValueFactory<>("transactionType"));
@@ -54,12 +45,71 @@ public class ShowScheduledTransactionsController {
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         paymentAmountColumn.setCellValueFactory(new PropertyValueFactory<>("paymentAmount"));
 
-        loadAndDisplayTransactions();
+        // Load and display all scheduled transactions in the table
+        loadAndDisplayScheduledTransactions();
+
+        // Add a listener to the search bar for filtering
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> searchScheduledTransactions(newValue));
+
+        // Enable row click functionality to edit transactions
+        scheduledTransactionTable.setRowFactory(tv -> {
+            TableRow<ScheduledTransactionModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    openEditPane(row.getItem());
+                }
+            });
+            return row;
+        });
     }
 
-    private void loadAndDisplayTransactions() {
+    private void loadAndDisplayScheduledTransactions() {
         ObservableList<ScheduledTransactionModel> transactions = FXCollections.observableArrayList(ScheduledTransactionModel.getScheduledTransactions());
-        transactions.sort(Comparator.comparingInt(ScheduledTransactionModel::getDueDate)); // Sort ascending by due date
+        // Sort transactions by Due Date in ascending order
+        transactions.sort(Comparator.comparingInt(ScheduledTransactionModel::getDueDate));
         scheduledTransactionTable.setItems(transactions);
+    }
+
+    private void searchScheduledTransactions(String searchTerm) {
+        ObservableList<ScheduledTransactionModel> filteredTransactions = FXCollections.observableArrayList();
+        for (ScheduledTransactionModel transaction : ScheduledTransactionModel.getScheduledTransactions()) {
+            if (transaction.getScheduleName().toLowerCase().contains(searchTerm.toLowerCase())) {
+                filteredTransactions.add(transaction);
+            }
+        }
+        scheduledTransactionTable.setItems(filteredTransactions);
+    }
+
+    private void openEditPane(ScheduledTransactionModel transaction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/editScheduledTransaction.fxml"));
+            AnchorPane editPane = loader.load();
+
+            // Pass the selected transaction to the edit controller
+            EditScheduledTransactionController controller = loader.getController();
+            controller.setTransaction(transaction);
+
+            // Replace the current view with the edit pane
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().remove(root.getChildren().size() - 1);
+            root.getChildren().add(editPane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void setRightPaneAsHome() {
+        URL dir = getClass().getResource("/resources/init.fxml");
+        try {
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().remove(root.getChildren().size() - 1);
+
+            AnchorPane initPane = FXMLLoader.load(dir);
+            root.getChildren().add(initPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -95,6 +95,31 @@ public class ScheduledTransactionModel {
         return false;
     }
 
+    public void setScheduleName(String scheduleName) {
+        this.scheduleName = scheduleName;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+    public void setDueDate(int dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setPaymentAmount(double paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+
     // Populate the file with 10 default scheduled transactions
     public static void populateDefaultScheduledTransactions() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(SCHEDULED_TRANSACTIONS_FILE))) {

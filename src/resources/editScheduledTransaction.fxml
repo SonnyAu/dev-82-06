@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditScheduledTransactionController">
+    <children>
+        <VBox alignment="CENTER" layoutX="100.0" layoutY="50.0" spacing="20" AnchorPane.bottomAnchor="50.0" AnchorPane.topAnchor="50.0">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <Label text="Edit Scheduled Transaction" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10.0">
+                <Label text="Account:" />
+                <ComboBox fx:id="accountDropdown" prefWidth="300.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Transaction Type:" />
+                <ComboBox fx:id="transactionTypeDropdown" prefWidth="300.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Frequency:" />
+                <ComboBox fx:id="frequencyDropdown" prefWidth="300.0" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Due Date:" />
+                <TextField fx:id="dueDateField" promptText="Enter day of the month" />
+            </HBox>
+
+            <HBox spacing="10.0">
+                <Label text="Payment Amount:" />
+                <TextField fx:id="paymentAmountField" />
+            </HBox>
+
+            <HBox spacing="20.0">
+                <Button fx:id="saveButton" text="Save" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
+                <Button fx:id="cancelButton" text="Cancel" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
+            </HBox>
+        </VBox>
+    </children>
+</AnchorPane>
