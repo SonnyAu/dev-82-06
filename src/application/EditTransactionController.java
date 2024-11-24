@@ -8,29 +8,14 @@ import javafx.scene.layout.AnchorPane;
 
 public class EditTransactionController {
 
-    @FXML
-    private ComboBox<String> accountDropdown;
+    @FXML private ComboBox<String> accountDropdown;
+    @FXML private ComboBox<String> transactionTypeDropdown;
+    @FXML private DatePicker transactionDate;
+    @FXML private TextField transactionDescription;
+    @FXML private TextField paymentAmount;
+    @FXML private TextField depositAmount;
+    @FXML private Button saveButton;
 
-    @FXML
-    private ComboBox<String> transactionTypeDropdown;
-
-    @FXML
-    private DatePicker transactionDate;
-
-    @FXML
-    private TextField transactionDescription;
-
-    @FXML
-    private TextField paymentAmount;
-
-    @FXML
-    private TextField depositAmount;
-
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private Button cancelButton;
 
     private TransactionModel currentTransaction; // To hold the transaction being edited
 
@@ -49,7 +34,7 @@ public class EditTransactionController {
         saveButton.setOnAction(e -> saveTransaction());
 
         // Set cancel button action
-        cancelButton.setOnAction(e -> closeEditPane());
+//        cancelButton.setOnAction(e -> closeEditPane());
     }
 
     // Restrict input fields to numeric values

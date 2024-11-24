@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="1000.0" prefWidth="1175.0" style="-fx-background-color: #acc497;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditTransactionController">
     <children>
@@ -21,44 +20,43 @@
             </padding>
 
             <!-- Title -->
-            <Label text="Edit Transaction" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" />
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Edit Transaction" />
 
             <!-- Account Dropdown -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Account:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label style="-fx-font-size: 14px; -fx-text-fill: black;" text="Account:" />
                 <ComboBox fx:id="accountDropdown" prefWidth="300.0" />
             </HBox>
 
             <!-- Transaction Type Dropdown -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Transaction Type:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label style="-fx-font-size: 14px; -fx-text-fill: black;" text="Transaction Type:" />
                 <ComboBox fx:id="transactionTypeDropdown" prefWidth="300.0" />
             </HBox>
 
             <!-- Transaction Date -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Transaction Date:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label style="-fx-font-size: 14px; -fx-text-fill: black;" text="Transaction Date:" />
                 <DatePicker fx:id="transactionDate" prefWidth="300.0" />
             </HBox>
 
             <!-- Description Field -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Description:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label style="-fx-font-size: 14px; -fx-text-fill: black;" text="Description:" />
                 <TextField fx:id="transactionDescription" prefWidth="600.0" />
             </HBox>
 
             <!-- Payment and Deposit Amount -->
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <Label text="Payment Amount:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+            <HBox alignment="CENTER" spacing="10.0">
+                <Label style="-fx-font-size: 14px; -fx-text-fill: black;" text="Payment Amount:" />
                 <TextField fx:id="paymentAmount" prefWidth="200.0" />
-                <Label text="Deposit Amount:" style="-fx-font-size: 14px; -fx-text-fill: black;" />
+                <Label style="-fx-font-size: 14px; -fx-text-fill: black;" text="Deposit Amount:" />
                 <TextField fx:id="depositAmount" prefWidth="200.0" />
             </HBox>
 
             <!-- Buttons -->
-            <HBox spacing="20.0" alignment="CENTER">
-                <Button fx:id="saveButton" text="Save" prefWidth="120.0" prefHeight="30.0" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
-                <Button fx:id="cancelButton" text="Cancel" prefWidth="120.0" prefHeight="30.0" style="-fx-background-color: #9fa698; -fx-text-fill: white;" />
+            <HBox alignment="CENTER" spacing="20.0">
+                <Button fx:id="saveButton" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #9fa698; -fx-text-fill: white;" text="Save" />
             </HBox>
         </VBox>
     </children>

@@ -1,8 +1,13 @@
 package application;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+
+import java.net.URL;
 
 public class EditScheduledTransactionController {
 
@@ -132,5 +137,9 @@ public class EditScheduledTransactionController {
         Alert alert = new Alert(type);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void cancelEditScheduledTransaction() {
+        closeEditPane();
     }
 }

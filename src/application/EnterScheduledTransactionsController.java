@@ -11,26 +11,14 @@ import java.util.List;
 
 public class EnterScheduledTransactionsController {
 
-    @FXML
-    private TextField scheduleNameField;
-
-    @FXML
-    private ComboBox<String> accountDropdown;
-
-    @FXML
-    private ComboBox<String> transactionTypeDropdown;
-
-    @FXML
-    private ComboBox<String> frequencyDropdown;
-
-    @FXML
-    private TextField dueDateField;
-
-    @FXML
-    private TextField paymentAmountField;
-
-    @FXML
-    private Button saveButton;
+    @FXML private TextField scheduleNameField;
+    @FXML private ComboBox<String> accountDropdown;
+    @FXML private ComboBox<String> transactionTypeDropdown;
+    @FXML private ComboBox<String> frequencyDropdown;
+    @FXML private TextField dueDateField;
+    @FXML private TextField paymentAmountField;
+    @FXML private Button saveButton;
+    @FXML private Button cancelButton;
 
     @FXML
     public void setRightPaneAsHome() {
@@ -133,4 +121,5 @@ public class EnterScheduledTransactionsController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }
