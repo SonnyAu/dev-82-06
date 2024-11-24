@@ -1,13 +1,8 @@
 package application;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-
-import java.net.URL;
 
 public class EditScheduledTransactionController {
 
@@ -33,7 +28,7 @@ public class EditScheduledTransactionController {
     private Button saveButton;
 
     @FXML
-    private Button cancelButton;
+    private Button cancelButton; // Optional, only present if defined in FXML
 
     private ScheduledTransactionModel currentTransaction; // Holds the transaction being edited
 
@@ -50,7 +45,11 @@ public class EditScheduledTransactionController {
 
         // Set button actions
         saveButton.setOnAction(e -> saveTransaction());
-        cancelButton.setOnAction(e -> closeEditPane());
+
+        // Check if cancelButton exists before setting its action
+        if (cancelButton != null) {
+            cancelButton.setOnAction(e -> closeEditPane());
+        }
     }
 
     public void setTransaction(ScheduledTransactionModel transaction) {
@@ -140,6 +139,6 @@ public class EditScheduledTransactionController {
     }
 
     public void cancelEditScheduledTransaction() {
-        closeEditPane();
+        closeEditPane(); // Safe to call, even without cancelButton
     }
 }
