@@ -2,7 +2,6 @@ package application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 
 public class EditScheduledTransactionController {
 
@@ -48,7 +47,7 @@ public class EditScheduledTransactionController {
 
         // Check if cancelButton exists before setting its action
         if (cancelButton != null) {
-            cancelButton.setOnAction(e -> closeEditPane());
+            cancelButton.setOnAction(e -> cancelEditScheduledTransaction());
         }
     }
 
@@ -82,7 +81,6 @@ public class EditScheduledTransactionController {
             ScheduledTransactionModel.updateScheduledTransaction(currentTransaction, oldScheduleName);
 
             showAlert("Scheduled transaction updated successfully!", Alert.AlertType.INFORMATION);
-            closeEditPane();
         }
     }
 
@@ -104,16 +102,6 @@ public class EditScheduledTransactionController {
             return false;
         }
         return true;
-    }
-
-    private void closeEditPane() {
-        try {
-            AnchorPane parent = (AnchorPane) saveButton.getScene().getRoot();
-            parent.getChildren().clear(); // Close the edit pane
-        } catch (Exception e) {
-            showAlert("Failed to close the edit pane.", Alert.AlertType.ERROR);
-            e.printStackTrace();
-        }
     }
 
     private void restrictToIntegerInput(TextField textField) {
@@ -139,6 +127,6 @@ public class EditScheduledTransactionController {
     }
 
     public void cancelEditScheduledTransaction() {
-        closeEditPane(); // Safe to call, even without cancelButton
+        // Placeholder for cancel functionality
     }
 }
