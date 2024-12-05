@@ -41,4 +41,5 @@ public class Main extends Application {
             System.out.println("Populated default scheduled transactions.");
         }
     }
+
 }

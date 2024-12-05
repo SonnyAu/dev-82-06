@@ -175,18 +175,26 @@ public class TransactionModel {
     // Get Transaction Types
     public static List<String> getTransactionTypes() {
         if (transactionTypes.isEmpty()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTION_TYPES_FILE))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    transactionTypes.add(line.trim());
+            File file = new File(TRANSACTION_TYPES_FILE);
+            if (!file.exists() || file.length() == 0) {
+                // Populate with default types if file is missing or empty
+                transactionTypes = List.of("Groceries", "Utilities", "Deposit", "Entertainment");
+                saveTransactionTypesToFile(); // Save default types to the file
+            } else {
+                try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTION_TYPES_FILE))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        transactionTypes.add(line.trim());
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error reading transaction types file: " + e.getMessage());
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                System.err.println("Error reading transaction types file: " + e.getMessage());
-                e.printStackTrace();
             }
         }
         return new ArrayList<>(transactionTypes);
     }
+
 
     // Add a transaction type
     public static void addTransactionType(String type) {
