@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.ReportByAccountController">
+    <children>
+        <!-- Dropdown for Account Selection -->
+        <ComboBox fx:id="accountDropdown" layoutX="50" layoutY="30" prefWidth="300" />
+
+        <!-- TableView for displaying transactions -->
+        <TableView fx:id="transactionsTable" layoutX="50" layoutY="80" prefWidth="800" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="transactionTypeColumn" text="Transaction Type" prefWidth="150" />
+                <TableColumn fx:id="transactionDateColumn" text="Transaction Date" prefWidth="150" />
+                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300" />
+                <TableColumn fx:id="paymentAmountColumn" text="Payment Amount" prefWidth="100" />
+                <TableColumn fx:id="depositAmountColumn" text="Deposit Amount" prefWidth="100" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

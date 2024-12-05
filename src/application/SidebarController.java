@@ -40,6 +40,16 @@ public class SidebarController {
         loadPage("/resources/showScheduledTransactions.fxml");
     }
 
+    @FXML
+    public void reportByAccountButton() {
+        loadPage("/resources/reportByAccount.fxml");
+    }
+
+    @FXML
+    public void reportByTypeButton() {
+        loadPage("/resources/reportByType.fxml");
+    }
+
     private void loadPage(String fxmlPath) {
         try {
             URL dir = getClass().getResource(fxmlPath);

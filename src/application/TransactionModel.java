@@ -3,7 +3,9 @@ package application;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransactionModel {
     private static final String TRANSACTIONS_FILE = "src/data/transactions.csv";
@@ -29,18 +31,53 @@ public class TransactionModel {
     }
 
     // Getters and Setters
-    public String getAccount() { return account; }
-    public void setAccount(String account) { this.account = account; }
-    public String getTransactionType() { return transactionType; }
-    public void setTransactionType(String transactionType) { this.transactionType = transactionType; }
-    public LocalDate getTransactionDate() { return transactionDate; }
-    public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
-    public String getTransactionDescription() { return transactionDescription; }
-    public void setTransactionDescription(String transactionDescription) { this.transactionDescription = transactionDescription; }
-    public double getPaymentAmount() { return paymentAmount; }
-    public void setPaymentAmount(double paymentAmount) { this.paymentAmount = paymentAmount; }
-    public double getDepositAmount() { return depositAmount; }
-    public void setDepositAmount(double depositAmount) { this.depositAmount = depositAmount; }
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public LocalDate getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public String getTransactionDescription() {
+        return transactionDescription;
+    }
+
+    public void setTransactionDescription(String transactionDescription) {
+        this.transactionDescription = transactionDescription;
+    }
+
+    public double getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(double paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+    public double getDepositAmount() {
+        return depositAmount;
+    }
+
+    public void setDepositAmount(double depositAmount) {
+        this.depositAmount = depositAmount;
+    }
 
     // Save a new transaction
     public static void saveTransaction(TransactionModel transaction) {
@@ -100,6 +137,22 @@ public class TransactionModel {
         return new ArrayList<>(transactionsList);
     }
 
+    // Get transactions by account, sorted in descending order of transaction date
+    public static List<TransactionModel> getTransactionsByAccount(String accountName) {
+        return transactionsList.stream()
+                .filter(t -> t.getAccount().equalsIgnoreCase(accountName))
+                .sorted(Comparator.comparing(TransactionModel::getTransactionDate).reversed())
+                .collect(Collectors.toList());
+    }
+
+    // Get transactions by type, sorted in descending order of transaction date
+    public static List<TransactionModel> getTransactionsByType(String transactionType) {
+        return transactionsList.stream()
+                .filter(t -> t.getTransactionType().equalsIgnoreCase(transactionType))
+                .sorted(Comparator.comparing(TransactionModel::getTransactionDate).reversed())
+                .collect(Collectors.toList());
+    }
+
     // Populate Default Transactions
     public static void populateDefaultTransactions() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(TRANSACTIONS_FILE))) {
@@ -145,12 +198,7 @@ public class TransactionModel {
 
     // Check if a transaction type is duplicate
     public static boolean isDuplicateTransactionType(String newType) {
-        for (String existingType : transactionTypes) {
-            if (existingType.equalsIgnoreCase(newType)) {
-                return true;
-            }
-        }
-        return false;
+        return transactionTypes.stream().anyMatch(existingType -> existingType.equalsIgnoreCase(newType));
     }
 
     // Save transaction types to file
@@ -164,6 +212,14 @@ public class TransactionModel {
             System.err.println("Error saving transaction types: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    // Delete a transaction
+    public static void deleteTransaction(TransactionModel transactionToDelete) {
+        transactionsList = transactionsList.stream()
+                .filter(t -> !t.equals(transactionToDelete))
+                .collect(Collectors.toList());
+        saveTransactionsToFile();
     }
 
     // Equals method for comparison
