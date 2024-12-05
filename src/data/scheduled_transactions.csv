@@ -6,5 +6,5 @@ Electricity Bill,Savings,Utilities,Monthly,20,50.0
 Water Bill,Savings,Utilities,Monthly,25,30.0
 Internet Bill,Savings,Utilities,Monthly,4,60.0
 Insurance Premium,Savings,Utilities,Monthly,1,100.0
-Client Meeting,Business,Entertainment,Quarterly,1,300.0
+Client Meeting,business,Entertainment,Quarterly,1,300.0
 Yearly Subscription,Savings,Entertainment,Yearly,1,120.0

@@ -8,7 +8,8 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.ReportByAccountController">
     <children>
         <!-- Dropdown for Account Selection -->
-        <ComboBox fx:id="accountDropdown" layoutX="50" layoutY="30" prefWidth="300" />
+        <ComboBox fx:id="accountDropdown" layoutX="50" layoutY="30" prefWidth="300" promptText="Enter an account" />
+
 
         <!-- TableView for displaying transactions -->
         <TableView fx:id="transactionsTable" layoutX="50" layoutY="80" prefWidth="800" prefHeight="400">
