@@ -3,12 +3,15 @@ package application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
+import java.net.URL;
 import java.util.List;
 
 public class ReportByAccountController {
@@ -74,6 +77,20 @@ public class ReportByAccountController {
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error loading transactions for the selected account: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void setRightPaneAsHome() {
+        URL dir = getClass().getResource("/resources/init.fxml");
+        try {
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().remove(root.getChildren().size() - 1);
+
+            AnchorPane initPane = FXMLLoader.load(dir);
+            root.getChildren().add(initPane);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

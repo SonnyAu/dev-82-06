@@ -3,9 +3,13 @@ package application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
+import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -66,14 +70,23 @@ public class ReportByTypeController {
         transactionTable.getItems().sort((t1, t2) -> t2.getTransactionDate().compareTo(t1.getTransactionDate()));
     }
 
-    @FXML
-    private void goBack() {
-        RootController.getInstance().goBack();
-    }
-
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void setRightPaneAsHome() {
+        URL dir = getClass().getResource("/resources/init.fxml");
+        try {
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().remove(root.getChildren().size() - 1);
+
+            AnchorPane initPane = FXMLLoader.load(dir);
+            root.getChildren().add(initPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
