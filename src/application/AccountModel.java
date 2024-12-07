@@ -27,7 +27,7 @@ public class AccountModel {
         this.date = date;
     }
 
-    public String getName() {
+    public String getAccount() {
         return name;
     }
 
@@ -43,7 +43,7 @@ public class AccountModel {
     public static boolean isDuplicateAccountName(String newName) {
         String lowerNewName = newName.toLowerCase();
         for (AccountModel account : accounts) {
-            if (account.getName().equals(lowerNewName)) {
+            if (account.getAccount().equals(lowerNewName)) {
                 return true;
             }
         }
@@ -60,7 +60,7 @@ public class AccountModel {
     public static List<String> getAccountNames() {
         Set<String> accountNames = new HashSet<>();
         for (AccountModel account : accounts) {
-            accountNames.add(account.getName());
+            accountNames.add(account.getAccount());
         }
         return new ArrayList<>(accountNames);
     }

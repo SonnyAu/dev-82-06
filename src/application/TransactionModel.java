@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TransactionModel {
+public class TransactionModel implements Model {
     private static final String TRANSACTIONS_FILE = "src/data/transactions.csv";
     private static final String TRANSACTION_TYPES_FILE = "src/data/transaction_types.csv";
     public static List<TransactionModel> transactionsList = new ArrayList<>();
