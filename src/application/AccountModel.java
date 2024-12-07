@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AccountModel {
+public class AccountModel implements Model{
     private String name;
     private double balance;
     private LocalDate date;
