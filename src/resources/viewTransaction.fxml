@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="application.ViewTransactionController">
+    <children>
+        <GridPane layoutX="20.0" layoutY="20.0" hgap="10" vgap="10">
+            <Label text="Account:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+            <TextField fx:id="accountField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false" />
+
+            <Label text="Transaction Type:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="typeField" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false" />
+
+            <Label text="Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <TextField fx:id="dateField" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="false" />
+
+            <Label text="Description:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextField fx:id="descriptionField" GridPane.rowIndex="3" GridPane.columnIndex="1" editable="false" />
+
+            <Label text="Payment Amount:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+            <TextField fx:id="paymentField" GridPane.rowIndex="4" GridPane.columnIndex="1" editable="false" />
+
+            <Label text="Deposit Amount:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+            <TextField fx:id="depositField" GridPane.rowIndex="5" GridPane.columnIndex="1" editable="false" />
+
+            <Button text="Back" onAction="#goBack" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+        </GridPane>
+    </children>
+</AnchorPane>

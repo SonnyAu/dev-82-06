@@ -42,11 +42,26 @@ public class ReportByTypeController {
 
     @FXML
     public void initialize() {
-        // Ensure all transactions are loaded at startup
+        try {
+            initializeTransactions();
+            initializeDropdown();
+            initializeTableColumns();
+        } catch (Exception e) {
+            logAndShowError("Error initializing Report By Type page: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void initializeTransactions() {
         TransactionModel.getAllTransactions(); // Load normal transactions
         ScheduledTransactionModel.getScheduledTransactions(); // Load scheduled transactions
+    }
 
-        // Set up the table columns
+    private void initializeDropdown() {
+        transactionTypeDropdown.setItems(FXCollections.observableArrayList(TransactionModel.getTransactionTypes()));
+        transactionTypeDropdown.setOnAction(event -> filterTransactionsByType());
+    }
+
+    private void initializeTableColumns() {
         accountColumn.setCellValueFactory(new PropertyValueFactory<>("account"));
         transactionDateColumn.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(data.getValue().getTransactionDate().format(dateFormatter)));
@@ -54,32 +69,49 @@ public class ReportByTypeController {
         paymentAmountColumn.setCellValueFactory(new PropertyValueFactory<>("paymentAmount"));
         depositAmountColumn.setCellValueFactory(new PropertyValueFactory<>("depositAmount"));
 
-        // Populate the dropdown with transaction types
-        transactionTypeDropdown.setItems(FXCollections.observableArrayList(TransactionModel.getTransactionTypes()));
-
-        // Add a listener to the dropdown for filtering transactions
-        transactionTypeDropdown.setOnAction(event -> filterTransactionsByType());
+        // Add double-click listener to open a transaction view
+        transactionTable.setRowFactory(tv -> {
+            TableRow<TransactionModel> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    openTransactionView(row.getItem());
+                }
+            });
+            return row;
+        });
     }
 
     private void filterTransactionsByType() {
         String selectedType = transactionTypeDropdown.getValue();
         if (selectedType == null || selectedType.isEmpty()) {
-            showAlert("Please select a transaction type.", Alert.AlertType.WARNING);
+            logAndShowError("Please select a transaction type.", Alert.AlertType.WARNING);
             return;
         }
 
-        // Fetch normal transactions by type
-        List<TransactionModel> normalTransactions = TransactionModel.getTransactionsByType(selectedType);
+        try {
+            ObservableList<TransactionModel> allTransactions = FXCollections.observableArrayList();
+            allTransactions.addAll(getNormalTransactions(selectedType));
+            allTransactions.addAll(getScheduledTransactions(selectedType));
 
-        // Fetch scheduled transactions and filter by type
+            transactionTable.setItems(allTransactions);
+            transactionTable.getItems().sort((t1, t2) -> t2.getTransactionDate().compareTo(t1.getTransactionDate()));
+        } catch (Exception e) {
+            logAndShowError("Error filtering transactions by type: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private List<TransactionModel> getNormalTransactions(String transactionType) {
+        return TransactionModel.getTransactionsByType(transactionType);
+    }
+
+    private List<TransactionModel> getScheduledTransactions(String transactionType) {
         List<TransactionModel> scheduledTransactions = new ArrayList<>();
         for (ScheduledTransactionModel scheduled : ScheduledTransactionModel.getScheduledTransactions()) {
-            if (scheduled.getTransactionType().equalsIgnoreCase(selectedType)) {
-                // Convert ScheduledTransactionModel to TransactionModel for display
+            if (scheduled.getTransactionType().equalsIgnoreCase(transactionType)) {
                 LocalDate calculatedDate = LocalDate.of(
                         LocalDate.now().getYear(),
                         LocalDate.now().getMonth(),
-                        scheduled.getDueDate() // Use the due date as the day of the month
+                        scheduled.getDueDate()
                 );
 
                 scheduledTransactions.add(new TransactionModel(
@@ -92,36 +124,45 @@ public class ReportByTypeController {
                 ));
             }
         }
+        return scheduledTransactions;
+    }
 
-        // Combine both lists
-        List<TransactionModel> allTransactions = new ArrayList<>(normalTransactions);
-        allTransactions.addAll(scheduledTransactions);
+    private void openTransactionView(TransactionModel transaction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/viewTransaction.fxml"));
+            AnchorPane viewTransactionPane = loader.load();
 
-        // Display the combined transactions in the table
-        ObservableList<TransactionModel> observableTransactions = FXCollections.observableArrayList(allTransactions);
-        transactionTable.setItems(observableTransactions);
+            // Pass transaction data to the controller
+            ViewTransactionController controller = loader.getController();
+            controller.setTransaction(transaction);
 
-        // Sort transactions in descending order by transaction date
-        transactionTable.getItems().sort((t1, t2) -> t2.getTransactionDate().compareTo(t1.getTransactionDate()));
+            // Replace current view with the transaction view
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().set(root.getChildren().size() - 1, viewTransactionPane);
+        } catch (Exception e) {
+            logAndShowError("Failed to open transaction view.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    public void setRightPaneAsHome() {
+        try {
+            URL dir = getClass().getResource("/resources/init.fxml");
+            HBox root = RootController.getInstance().getContainer();
+            root.getChildren().set(root.getChildren().size() - 1, FXMLLoader.load(dir));
+        } catch (Exception e) {
+            logAndShowError("Error navigating to Home.", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void logAndShowError(String message, Alert.AlertType alertType) {
+        System.err.println(message); // Log error
+        showAlert(message, alertType);
     }
 
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    @FXML
-    public void setRightPaneAsHome() {
-        URL dir = getClass().getResource("/resources/init.fxml");
-        try {
-            HBox root = RootController.getInstance().getContainer();
-            root.getChildren().remove(root.getChildren().size() - 1);
-
-            AnchorPane initPane = FXMLLoader.load(dir);
-            root.getChildren().add(initPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
