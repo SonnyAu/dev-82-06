@@ -1,14 +1,17 @@
 package application;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
 public class Main extends Application {
 
-    // set stage to the root controller
+    // Set the stage to the root controller
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Prepopulate the CSV files with default data if needed
@@ -21,6 +24,9 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        // Show popup for scheduled transactions due today
+        showScheduledTransactionsPopup();
     }
 
     public static void main(String[] args) {
@@ -42,4 +48,18 @@ public class Main extends Application {
         }
     }
 
+    // Method to show the popup for scheduled transactions due today
+    private void showScheduledTransactionsPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/scheduledTransactionPopup.fxml"));
+            Stage popupStage = new Stage(StageStyle.DECORATED);
+            popupStage.setTitle("Scheduled Transactions Due Today");
+            popupStage.setScene(new Scene(loader.load()));
+            popupStage.initModality(Modality.APPLICATION_MODAL); // Ensure the popup is modal
+            popupStage.initOwner(null); // Attach to the main stage (optional)
+            popupStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
