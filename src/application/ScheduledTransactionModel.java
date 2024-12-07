@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduledTransactionModel {
+public class ScheduledTransactionModel implements Model{
 
     private static final String SCHEDULED_TRANSACTIONS_FILE = "src/data/scheduled_transactions.csv";
 
