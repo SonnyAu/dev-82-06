@@ -33,11 +33,6 @@
             </TableView>
         </VBox>
 
-        <!-- Error Message -->
-        <Label fx:id="errorMsg" layoutX="450.0" layoutY="500.0" textFill="RED" text="No transactions found.">
-            <font>
-                <Font name="Microsoft Sans Serif" size="12.0" />
-            </font>
-        </Label>
+
     </children>
 </AnchorPane>

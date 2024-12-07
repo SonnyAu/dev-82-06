@@ -10,7 +10,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReportByTypeController {
@@ -40,6 +42,10 @@ public class ReportByTypeController {
 
     @FXML
     public void initialize() {
+        // Ensure all transactions are loaded at startup
+        TransactionModel.getAllTransactions(); // Load normal transactions
+        ScheduledTransactionModel.getScheduledTransactions(); // Load scheduled transactions
+
         // Set up the table columns
         accountColumn.setCellValueFactory(new PropertyValueFactory<>("account"));
         transactionDateColumn.setCellValueFactory(data ->
@@ -62,8 +68,37 @@ public class ReportByTypeController {
             return;
         }
 
-        List<TransactionModel> filteredTransactions = TransactionModel.getTransactionsByType(selectedType);
-        ObservableList<TransactionModel> observableTransactions = FXCollections.observableArrayList(filteredTransactions);
+        // Fetch normal transactions by type
+        List<TransactionModel> normalTransactions = TransactionModel.getTransactionsByType(selectedType);
+
+        // Fetch scheduled transactions and filter by type
+        List<TransactionModel> scheduledTransactions = new ArrayList<>();
+        for (ScheduledTransactionModel scheduled : ScheduledTransactionModel.getScheduledTransactions()) {
+            if (scheduled.getTransactionType().equalsIgnoreCase(selectedType)) {
+                // Convert ScheduledTransactionModel to TransactionModel for display
+                LocalDate calculatedDate = LocalDate.of(
+                        LocalDate.now().getYear(),
+                        LocalDate.now().getMonth(),
+                        scheduled.getDueDate() // Use the due date as the day of the month
+                );
+
+                scheduledTransactions.add(new TransactionModel(
+                        scheduled.getAccount(),
+                        scheduled.getTransactionType(),
+                        calculatedDate,
+                        scheduled.getScheduleName(),
+                        scheduled.getPaymentAmount(),
+                        0.0 // Scheduled transactions typically lack deposits
+                ));
+            }
+        }
+
+        // Combine both lists
+        List<TransactionModel> allTransactions = new ArrayList<>(normalTransactions);
+        allTransactions.addAll(scheduledTransactions);
+
+        // Display the combined transactions in the table
+        ObservableList<TransactionModel> observableTransactions = FXCollections.observableArrayList(allTransactions);
         transactionTable.setItems(observableTransactions);
 
         // Sort transactions in descending order by transaction date

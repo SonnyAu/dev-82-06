@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReportByAccountController {
@@ -40,13 +42,17 @@ public class ReportByAccountController {
     @FXML
     public void initialize() {
         try {
+            // Ensure transactions are initialized
+            TransactionModel.getAllTransactions(); // Load normal transactions
+            ScheduledTransactionModel.getScheduledTransactions(); // Load scheduled transactions
+
             // Populate the dropdown with account names
             List<String> accountNames = AccountModel.getAccountNames();
             accountDropdown.setItems(FXCollections.observableArrayList(accountNames));
 
             // Bind table columns to TransactionModel properties
             transactionTypeColumn.setCellValueFactory(new PropertyValueFactory<>("transactionType"));
-            transactionDateColumn.setCellValueFactory(new PropertyValueFactory<>("transactionDate")); // Ensure date is formatted properly in TransactionModel
+            transactionDateColumn.setCellValueFactory(new PropertyValueFactory<>("transactionDate"));
             descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("transactionDescription"));
             paymentAmountColumn.setCellValueFactory(new PropertyValueFactory<>("paymentAmount"));
             depositAmountColumn.setCellValueFactory(new PropertyValueFactory<>("depositAmount"));
@@ -68,11 +74,37 @@ public class ReportByAccountController {
                 return;
             }
 
-            // Fetch transactions for the selected account
-            List<TransactionModel> transactions = TransactionModel.getTransactionsByAccount(selectedAccount);
+            // Fetch normal transactions by account
+            List<TransactionModel> normalTransactions = TransactionModel.getTransactionsByAccount(selectedAccount);
 
-            // Populate the table with transactions
-            ObservableList<TransactionModel> observableTransactions = FXCollections.observableArrayList(transactions);
+            // Fetch scheduled transactions and filter by account
+            List<TransactionModel> scheduledTransactions = new ArrayList<>();
+            for (ScheduledTransactionModel scheduled : ScheduledTransactionModel.getScheduledTransactions()) {
+                if (scheduled.getAccount().equalsIgnoreCase(selectedAccount)) {
+                    // Convert ScheduledTransactionModel to TransactionModel for display
+                    LocalDate calculatedDate = LocalDate.of(
+                            LocalDate.now().getYear(),
+                            LocalDate.now().getMonth(),
+                            scheduled.getDueDate()
+                    );
+
+                    scheduledTransactions.add(new TransactionModel(
+                            scheduled.getAccount(),
+                            scheduled.getTransactionType(),
+                            calculatedDate,
+                            scheduled.getScheduleName(),
+                            scheduled.getPaymentAmount(),
+                            0.0 // Scheduled transactions typically lack deposits
+                    ));
+                }
+            }
+
+            // Combine both lists
+            List<TransactionModel> allTransactions = new ArrayList<>(normalTransactions);
+            allTransactions.addAll(scheduledTransactions);
+
+            // Populate the table with combined transactions
+            ObservableList<TransactionModel> observableTransactions = FXCollections.observableArrayList(allTransactions);
             transactionsTable.setItems(observableTransactions);
         } catch (Exception e) {
             e.printStackTrace();
